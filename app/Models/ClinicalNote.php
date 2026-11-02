@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DecryptsAttributesSafely;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,10 @@ use App\Traits\Auditable;
 
 class ClinicalNote extends Model
 {
+    use DecryptsAttributesSafely;
     use HasFactory, Auditable;
+
+    protected static bool $loggedUndecryptableAttribute = false;
 
     protected $fillable = [
         'patient_id', 'psychologist_id', 'conversation_id', 'content',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\LocalizedNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,6 +36,16 @@ class Notification extends Model
     public function isRead(): bool
     {
         return $this->read_at !== null;
+    }
+
+    public function localizedTitle(): string
+    {
+        return LocalizedNotification::title($this);
+    }
+
+    public function localizedBody(): string
+    {
+        return LocalizedNotification::body($this);
     }
 
     public function markAsRead(): void

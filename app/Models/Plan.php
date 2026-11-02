@@ -84,10 +84,33 @@ class Plan extends Model
     public function getFeaturesAttribute(mixed $value): ?array
     {
         $translated = $this->translate()?->features;
+        $english = $this->catalogValue('features', 'en');
+        $catalog = $this->catalogValue('features');
+        $base = $this->decodeFeatureList($value);
+        $copiedFromEnglish = is_array($translated) && $translated !== []
+            && ($translated === $english || $translated === $base);
+
+        if (is_array($translated) && $translated !== [] && ! $copiedFromEnglish) {
+            return $translated;
+        }
+
+        if (is_array($catalog) && $catalog !== []) {
+            return $catalog;
+        }
+
         if (is_array($translated) && $translated !== []) {
             return $translated;
         }
 
+        if (is_array($value)) {
+            return $value;
+        }
+
+        return $this->decodeFeatureList($value);
+    }
+
+    protected function decodeFeatureList(mixed $value): ?array
+    {
         if (is_array($value)) {
             return $value;
         }
@@ -191,14 +214,62 @@ class Plan extends Model
         ];
     }
 
+    public static function localizeKnownName(string $name): string
+    {
+        $catalog = trans('plans');
+        if (! is_array($catalog)) {
+            return $name;
+        }
+
+        foreach (array_keys($catalog) as $slug) {
+            if (! is_string($slug)) {
+                continue;
+            }
+
+            $english = trans('plans.'.$slug.'.name', [], 'en');
+            $current = trans('plans.'.$slug.'.name');
+            if ($name === $english || $name === $current) {
+                return is_string($current) ? $current : $name;
+            }
+        }
+
+        return $name;
+    }
+
+    protected function catalogValue(string $field, ?string $locale = null): mixed
+    {
+        $slug = $this->attributes['slug'] ?? null;
+        if (! is_string($slug) || $slug === '') {
+            return null;
+        }
+
+        $key = 'plans.'.$slug.'.'.$field;
+        $value = $locale === null ? __($key) : trans($key, [], $locale);
+
+        return $value === $key ? null : $value;
+    }
+
     protected function translatedValue(string $field, mixed $fallback): mixed
     {
         $translated = $this->translate()?->{$field} ?? null;
+        $english = $this->catalogValue($field, 'en');
+        $catalog = $this->catalogValue($field);
 
-        if ($translated === null || $translated === '') {
-            return $fallback;
+        $copiedFromEnglish = is_string($translated) && $translated !== ''
+            && ($translated === $english || $translated === $fallback);
+
+        if (is_string($translated) && $translated !== '' && ! $copiedFromEnglish) {
+            return $translated;
         }
 
-        return $translated;
+        if (is_string($catalog) && $catalog !== '') {
+            return $catalog;
+        }
+
+        if (is_string($translated) && $translated !== '') {
+            return $translated;
+        }
+
+        return $fallback;
     }
 }

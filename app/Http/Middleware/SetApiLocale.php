@@ -21,6 +21,7 @@ class SetApiLocale
         }
 
         App::setLocale($locale);
+        Locales::applyCarbon($locale);
 
         return $next($request);
     }

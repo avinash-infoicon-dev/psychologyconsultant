@@ -5,7 +5,7 @@
 
 <section class="fe-profile-section-block">
   <div class="fe-profile-toolbar">
-    <h3>Profile Settings</h3>
+    <h3>{{ __('frontend.psych_profile.settings_title') }}</h3>
   </div>
 
   <form action="{{ route('frontend.psychologist.profile.settings.update') }}" method="post" class="fe-form">
@@ -14,7 +14,7 @@
 
     <div class="fe-form-grid" style="grid-template-columns: 1fr; max-width: 600px;">
       <div class="fe-form-group">
-        <label for="profile_timezone" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Timezone</label>
+        <label for="profile_timezone" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">{{ __('frontend.psych_profile.timezone') }}</label>
         
         {{-- Searchable Select --}}
         <select name="timezone" id="profile_timezone" class="fe-select select2-timezone" required style="width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--fe-border);">
@@ -23,12 +23,12 @@
           @endforeach
         </select>
         
-        <p class="fe-muted" style="margin-top: 0.35rem; font-size: 0.8rem;">Select your local timezone. This will be used to show your availability correctly to patients.</p>
+        <p class="fe-muted" style="margin-top: 0.35rem; font-size: 0.8rem;">{{ __('frontend.psych_profile.timezone_hint') }}</p>
       </div>
     </div>
 
     <div class="fe-form-actions" style="margin-top: 1.5rem;">
-      <button type="submit" class="fe-btn fe-btn--primary">Save Settings</button>
+      <button type="submit" class="fe-btn fe-btn--primary">{{ __('frontend.psych_profile.save_settings') }}</button>
     </div>
   </form>
 </section>
@@ -48,7 +48,7 @@
   <script>
     $(document).ready(function() {
       $('.select2-timezone').select2({
-        placeholder: "Select Timezone",
+        placeholder: @json(__('frontend.psych_profile.select_timezone')),
         allowClear: false
       });
     });

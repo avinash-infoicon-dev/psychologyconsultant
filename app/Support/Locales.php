@@ -106,8 +106,22 @@ class Locales
         }
 
         App::setLocale($locale);
+        self::applyCarbon($locale);
 
         return $locale;
+    }
+
+    public static function applyCarbon(string $locale): void
+    {
+        $carbon = match (true) {
+            str_starts_with($locale, 'fr') => 'fr',
+            str_starts_with($locale, 'de') => 'de',
+            str_starts_with($locale, 'it') => 'it',
+            default => 'en',
+        };
+
+        \Carbon\Carbon::setLocale($carbon);
+        \Carbon\CarbonImmutable::setLocale($carbon);
     }
 
     public static function fromAcceptLanguage(?string $header): ?string

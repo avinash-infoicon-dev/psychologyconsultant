@@ -17,7 +17,7 @@
     @if ($currentAbsence)
       <div class="fe-alert fe-alert--warning">
         {{ __('frontend.absences.currently_away', [
-          'until' => $currentAbsence->ends_at?->format('d M Y H:i'),
+          'until' => \App\Support\AbsenceReason::format($currentAbsence->ends_at),
         ]) }}
       </div>
     @endif
@@ -41,7 +41,7 @@
             </form>
           </span>
         </div>
-        <p class="fe-muted" style="margin:0;">{{ $absence->reason ?: __('frontend.absences.no_reason') }}</p>
+        <p class="fe-muted" style="margin:0;">{{ \App\Support\AbsenceReason::label($absence->reason) }}</p>
       </article>
     @empty
       @include('frontend.partials.ui-empty', [
@@ -74,9 +74,9 @@
           <tbody>
             @foreach ($absences as $absence)
               <tr>
-                <td>{{ $absence->starts_at?->format('d M Y H:i') }}</td>
-                <td>{{ $absence->ends_at?->format('d M Y H:i') }}</td>
-                <td>{{ $absence->reason ?: __('frontend.absences.no_reason') }}</td>
+                <td>{{ \App\Support\AbsenceReason::format($absence->starts_at) }}</td>
+                <td>{{ \App\Support\AbsenceReason::format($absence->ends_at) }}</td>
+                <td>{{ \App\Support\AbsenceReason::label($absence->reason) }}</td>
                 <td>
                   <div class="fe-table-actions">
                     <a href="{{ route('frontend.psychologist.absences.edit', $absence) }}" class="fe-btn fe-btn--outline fe-btn--sm">

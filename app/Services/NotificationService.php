@@ -194,8 +194,8 @@ class NotificationService
         return [
             'id' => $notification->id,
             'type' => $notification->type,
-            'title' => $notification->title,
-            'body' => $notification->body,
+            'title' => $notification->localizedTitle(),
+            'body' => $notification->localizedBody(),
             'url' => $data['url'] ?? null,
             'conversation_id' => $data['conversation_id'] ?? null,
             'read_at' => $notification->read_at?->toIso8601String(),

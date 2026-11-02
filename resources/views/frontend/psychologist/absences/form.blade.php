@@ -32,7 +32,20 @@
       </div>
       <div class="fe-form-group">
         <label for="reason">{{ __('frontend.absences.reason') }}</label>
-        <input type="text" name="reason" id="reason" class="fe-input" maxlength="255" value="{{ old('reason', $absence?->reason) }}">
+        @php
+          $reasonValue = old('reason', $absence?->reason);
+          $reasonKeys = \App\Support\AbsenceReason::KEYS;
+        @endphp
+        <select name="reason" id="reason" class="fe-select">
+          <option value="">{{ __('frontend.absences.no_reason') }}</option>
+          @foreach ($reasonKeys as $reasonKey)
+            <option value="{{ $reasonKey }}" @selected($reasonValue === $reasonKey)>{{ __('frontend.absences.reasons.'.$reasonKey) }}</option>
+          @endforeach
+          @if (is_string($reasonValue) && $reasonValue !== '' && ! in_array($reasonValue, $reasonKeys, true))
+            <option value="{{ $reasonValue }}" selected>{{ $reasonValue }}</option>
+          @endif
+        </select>
+        <p class="fe-muted" style="margin:.35rem 0 0;">{{ __('frontend.absences.reason_hint') }}</p>
       </div>
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" name="is_active" value="1" id="is_active" @checked(old('is_active', $absence?->is_active ?? true))>

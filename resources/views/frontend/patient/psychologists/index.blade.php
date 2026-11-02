@@ -269,7 +269,7 @@
                 @php $absence = $professional->currentAbsences->first(); @endphp
                 <span class="bg-warning-focus text-warning-600 border border-warning-main px-12 py-4 radius-4 fw-medium text-xs d-inline-flex align-items-center gap-4">
                   <iconify-icon icon="solar:calendar-bold" class="icon text-sm"></iconify-icon>
-                  {{ __('frontend.professionals.away_until', ['until' => $absence->ends_at?->format('d M Y')]) }}
+                  {{ __('frontend.professionals.away_until', ['until' => \App\Support\AbsenceReason::format($absence->ends_at, 'd M Y')]) }}
                 </span>
               @endif
             </div>
@@ -322,14 +322,14 @@
                     <span class="fe-avail-modal__eyebrow"><i class="bi bi-calendar2-week"></i> {{ __('frontend.professionals.availability') }}</span>
                     <h2>{{ $professional->name }}</h2>
                   </div>
-                  <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('{{ $modalId }}').close()" aria-label="Close">&times;</button>
+                  <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('{{ $modalId }}').close()" aria-label="{{ __('frontend.psych_profile.close') }}">&times;</button>
                 </div>
                 <div class="fe-avail-modal__body">
                   <div class="fe-avail-modal__tz">
-                    <span>Timezone</span>
+                    <span>{{ __('frontend.psych_profile.timezone') }}</span>
                     <strong><i class="bi bi-globe2"></i> {{ $professional->settings?->timezone ?? 'Europe/Zurich' }}</strong>
                   </div>
-                  <h3>Weekly availability</h3>
+                  <h3>{{ __('frontend.availability.title') }}</h3>
                   <div class="fe-avail-modal__days">
                     @foreach ($orderedDays as $d)
                       @php
@@ -352,7 +352,7 @@
                   </div>
                 </div>
                 <div class="fe-avail-modal__foot">
-                  <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('{{ $modalId }}').close()">Close</button>
+                  <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('{{ $modalId }}').close()">{{ __('frontend.psych_profile.close') }}</button>
                 </div>
               </div>
             </dialog>
@@ -506,9 +506,9 @@
               <i class="bi bi-calendar-x"></i>
               <div>
                 <strong>{{ __('frontend.professionals.currently_away') }}</strong>
-                <span>{{ __('frontend.professionals.away_until', ['until' => $absence->ends_at?->format('d M Y')]) }}</span>
+                <span>{{ __('frontend.professionals.away_until', ['until' => \App\Support\AbsenceReason::format($absence->ends_at, 'd M Y')]) }}</span>
                 @if ($absence->reason)
-                  <span>{{ $absence->reason }}</span>
+                  <span>{{ \App\Support\AbsenceReason::label($absence->reason) }}</span>
                 @endif
               </div>
             </div>
@@ -541,15 +541,15 @@
                   <span class="fe-avail-modal__eyebrow"><i class="bi bi-calendar2-week"></i> {{ __('frontend.professionals.availability') }}</span>
                   <h2>{{ $professional->name }}</h2>
                 </div>
-                <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('{{ $modalId }}').close()" aria-label="Close">&times;</button>
+                <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('{{ $modalId }}').close()" aria-label="{{ __('frontend.psych_profile.close') }}">&times;</button>
               </div>
               <div class="fe-avail-modal__body">
                 <div class="fe-avail-modal__tz">
-                  <span>Timezone</span>
+                  <span>{{ __('frontend.psych_profile.timezone') }}</span>
                   <strong><i class="bi bi-globe2"></i> {{ $professional->settings?->timezone ?? 'Europe/Zurich' }}</strong>
                 </div>
 
-                <h3>Weekly availability</h3>
+                <h3>{{ __('frontend.availability.title') }}</h3>
                 <div class="fe-avail-modal__days">
                   @foreach ($orderedDays as $d)
                     @php
@@ -572,7 +572,7 @@
                 </div>
               </div>
               <div class="fe-avail-modal__foot">
-                <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('{{ $modalId }}').close()">Close</button>
+                <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('{{ $modalId }}').close()">{{ __('frontend.psych_profile.close') }}</button>
               </div>
             </div>
           </dialog>

@@ -38,8 +38,8 @@
     @forelse ($notifications as $item)
       <article class="fe-notification-row {{ $item->read_at ? 'is-read' : 'is-unread' }}" data-notification-id="{{ $item->id }}">
         <div>
-          <strong>{{ $item->title }}</strong>
-          <p class="mb-1">{{ $item->body }}</p>
+          <strong>{{ $item->localizedTitle() }}</strong>
+          <p class="mb-1">{{ $item->localizedBody() }}</p>
           <small class="fe-muted">{{ $item->created_at?->diffForHumans() }}</small>
         </div>
         {{-- Old: <div class="d-flex flex-wrap gap-2"> — Open <a> stretched to the row height. --}}

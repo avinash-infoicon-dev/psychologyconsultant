@@ -204,9 +204,9 @@
               <i class="bi bi-calendar-x"></i>
               <div>
                 <strong>{{ __('frontend.professionals.currently_away') }}</strong>
-                <span>{{ __('frontend.professionals.away_until', ['until' => $absence->ends_at?->format('d M Y H:i')]) }}</span>
+                <span>{{ __('frontend.professionals.away_until', ['until' => \App\Support\AbsenceReason::format($absence->ends_at)]) }}</span>
                 @if ($absence->reason)
-                  <span class="fe-muted">{{ $absence->reason }}</span>
+                  <span class="fe-muted">{{ \App\Support\AbsenceReason::label($absence->reason) }}</span>
                 @endif
               </div>
             </div>
@@ -254,15 +254,15 @@
                   <span class="fe-avail-modal__eyebrow"><i class="bi bi-calendar2-week"></i> {{ __('frontend.professionals.availability') }}</span>
                   <h2>{{ $professional->name }}</h2>
                 </div>
-                <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('full-availability-modal').close()" aria-label="Close">&times;</button>
+                <button type="button" class="fe-avail-modal__close" onclick="document.getElementById('full-availability-modal').close()" aria-label="{{ __('frontend.psych_profile.close') }}">&times;</button>
               </div>
               <div class="fe-avail-modal__body">
                 <div class="fe-avail-modal__tz">
-                  <span>Timezone</span>
+                  <span>{{ __('frontend.psych_profile.timezone') }}</span>
                   <strong><i class="bi bi-globe2"></i> {{ $professional->settings?->timezone ?? 'Europe/Zurich' }}</strong>
                 </div>
 
-                <h3>Weekly availability</h3>
+                <h3>{{ __('frontend.availability.title') }}</h3>
                 <div class="fe-avail-modal__days">
                   @foreach ($orderedDays as $d)
                     @php
@@ -289,9 +289,9 @@
                   <div class="fe-avail-modal__absences">
                     @foreach ($professional->absences as $abs)
                       <div class="fe-avail-modal__away">
-                        <strong>{{ $abs->starts_at?->format('d M') }} – {{ $abs->ends_at?->format('d M Y') }}</strong>
+                        <strong>{{ \App\Support\AbsenceReason::format($abs->starts_at, 'd M') }} – {{ \App\Support\AbsenceReason::format($abs->ends_at, 'd M Y') }}</strong>
                         @if($abs->reason)
-                          <span>{{ $abs->reason }}</span>
+                          <span>{{ \App\Support\AbsenceReason::label($abs->reason) }}</span>
                         @endif
                       </div>
                     @endforeach
@@ -299,7 +299,7 @@
                 @endif
               </div>
               <div class="fe-avail-modal__foot">
-                <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('full-availability-modal').close()">Close</button>
+                <button type="button" class="fe-avail-modal__done" onclick="document.getElementById('full-availability-modal').close()">{{ __('frontend.psych_profile.close') }}</button>
               </div>
             </div>
           </dialog>
