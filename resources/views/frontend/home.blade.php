@@ -85,11 +85,12 @@
                                         @endif
                                         @if ($slider->button_text)
                                           @include('frontend.partials.home-slider-cta', [
-                                            'href' => $slider->button_url,
+                                            #'href' => $slider->button_url,
+                                            'href' => route('frontend.meet-psychologists'),
                                             'label' => $slider->button_text,
                                             'filterId' => 'homeSliderFilter'.$slider->id,
                                           ])
-                                        @endif
+                                        @endif 
                                     </div>
                                 </div>
                             </div>
@@ -463,7 +464,7 @@
                             </ul>
                         </div>
                         <div class="cst-about-btn tp_fade_anim" data-delay=".7" data-fade-from="top" data-ease="bounce">
-                            <a class="cst-btn" href="{{ route('frontend.auth.login') }}">
+                            <a class="cst-btn" href="{{ route('frontend.about') }}">
                                 <span>
                                     <span class="text-1">
                                         {{ __('frontend.home.learn_more') }}
