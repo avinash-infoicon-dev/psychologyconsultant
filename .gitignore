@@ -18,6 +18,10 @@
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
+/public/backendassets
+/public/frontendassets
+/public/commonassets
+/public/favicon.ico
 /storage/*.key
 /storage/pail
 /vendor
