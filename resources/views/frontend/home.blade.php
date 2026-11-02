@@ -464,7 +464,7 @@
                             </ul>
                         </div>
                         <div class="cst-about-btn tp_fade_anim" data-delay=".7" data-fade-from="top" data-ease="bounce">
-                            <a class="cst-btn" href="{{ route('frontend.about') }}">
+                            <a class="cst-btn" href="{{ route('frontend.auth.login') }}">
                                 <span>
                                     <span class="text-1">
                                         {{ __('frontend.home.learn_more') }}
