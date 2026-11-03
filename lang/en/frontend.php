@@ -13,6 +13,7 @@ return [
         'contact' => 'Contact',
         'login' => 'Log in',
         'register' => 'Register',
+        'subscription_plan' => 'Subscription',
         'dashboard' => 'Dashboard',
         'logout' => 'Log out',
     ],

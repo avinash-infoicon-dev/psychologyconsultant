@@ -87,6 +87,7 @@
                         </form>
                       </li>
                     @else
+                      <li><a href="{{ route('frontend.onboarding.plans') }}">{{ __('frontend.nav.subscription_plan') }}</a></li>
                       <li><a href="{{ route('frontend.auth.login') }}">{{ __('frontend.nav.login') }}</a></li>
                       <li><a href="{{ route('frontend.auth.register') }}">{{ __('frontend.nav.register') }}</a></li>
                     @endauth
@@ -160,6 +161,12 @@
                                         </li>
                                       @endif
                                     @endforeach
+
+                                    <li class="@if(request()->routeIs('frontend.onboarding.plans', 'frontend.patient.subscription.*')) active @endif">
+                                      <a href="{{ auth()->user()?->isPatient() ? route('frontend.patient.subscription.index') : route('frontend.onboarding.plans') }}">
+                                        {{ __('frontend.nav.subscription_plan') }}
+                                      </a>
+                                    </li>
 
                                     @auth
                                       @if (auth()->user()->isPatient())

@@ -86,7 +86,8 @@
                                         @if ($slider->button_text)
                                           @include('frontend.partials.home-slider-cta', [
                                             #'href' => $slider->button_url,
-                                            'href' => route('frontend.meet-psychologists'),
+                                            #'href' => route('frontend.meet-psychologists'),
+                                            'href' => route('frontend.onboarding.plans'),
                                             'label' => $slider->button_text,
                                             'filterId' => 'homeSliderFilter'.$slider->id,
                                           ])
