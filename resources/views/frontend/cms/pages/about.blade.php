@@ -68,7 +68,7 @@
                         </div>
                         @if ($page->layout('button_text'))
                           <div class="cst-about-btn tp_fade_anim" data-delay=".7" data-fade-from="top" data-ease="bounce">
-                            <a class="cst-btn" href="{{ $page->layout('button_url') ?: '#' }}">
+                            <a class="cst-btn" href="{{ route('frontend.auth.login') }}">
                                 <span>
                                     <span class="text-1">{{ $page->layout('button_text') }} <i class="fa-solid fa-arrow-right"></i></span>
                                     <span class="text-2">{{ $page->layout('button_text') }} <i class="fa-solid fa-arrow-right"></i></span>
