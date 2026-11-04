@@ -29,7 +29,6 @@ class ResetPasswordNotification extends Notification
         app()->setLocale($locale);
 
         return (new MailMessage)
-            ->locale($locale)
             ->subject(__('auth_api.password_reset_mail_subject'))
             ->markdown('emails.password-reset', [
                 'userName' => $notifiable->name,
