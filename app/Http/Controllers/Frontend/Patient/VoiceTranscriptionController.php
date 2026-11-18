@@ -23,6 +23,14 @@ class VoiceTranscriptionController extends Controller
         ]);
 
         try {
+            $apiKey = config('services.openai.key');
+            if (! is_string($apiKey) || $apiKey === '') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Transcription is not configured. Add OPENAI_API_KEY on the server and run php artisan config:clear.',
+                ], 503);
+            }
+
             $audio = $request->file('audio');
             $mime = $audio->getMimeType() ?: $audio->getClientMimeType();
             $extension = match ($mime) {
@@ -35,9 +43,7 @@ class VoiceTranscriptionController extends Controller
                 default => 'wav',
             };
 
-            $response = Http::withToken(
-                config('services.openai.key')
-            )
+            $response = Http::withToken($apiKey)
             ->timeout(120)
             ->attach(
                 'file',
@@ -62,7 +68,7 @@ class VoiceTranscriptionController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Unable to transcribe audio.',
+                    'message' => $response->json('error.message') ?: 'Unable to transcribe audio.',
                 ], 502);
             }
 
