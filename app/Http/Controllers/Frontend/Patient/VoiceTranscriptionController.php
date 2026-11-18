@@ -72,9 +72,38 @@ class VoiceTranscriptionController extends Controller
                 ], 502);
             }
 
+            $text = trim((string) ($response->json('text') ?? ''));
+
+            // gpt-transcribe sometimes accepts a browser recording and returns no words.
+            // whisper-1 reads those same files.
+            if ($text === '' && config('services.openai.transcription_model') !== 'whisper-1') {
+                $retry = Http::withToken($apiKey)
+                    ->timeout(120)
+                    ->attach(
+                        'file',
+                        file_get_contents($audio->getRealPath()),
+                        'recording.'.$extension
+                    )
+                    ->post(
+                        'https://api.openai.com/v1/audio/transcriptions',
+                        ['model' => 'whisper-1']
+                    );
+
+                if ($retry->successful()) {
+                    $text = trim((string) ($retry->json('text') ?? ''));
+                }
+            }
+
+            if ($text === '') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No words were detected. Speak a full sentence and try again.',
+                ], 422);
+            }
+
             return response()->json([
                 'success' => true,
-                'text' => $response->json('text'),
+                'text' => $text,
             ]);
 
         } catch (\Throwable $e) {
