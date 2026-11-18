@@ -539,7 +539,7 @@ return [
         'transcribe' => 'Transcribe',
         'transcribing' => 'Transcribing...',
         'discard_recording' => 'Discard',
-        'recording_ready' => 'Recording ready — send as voice or transcribe to text',
+        'recording_ready' => 'Check the words. Send the voice message, or Discard if this take is wrong.',
         'recording' => 'Recording... tap mic to stop',
         'recording_limit_reached' => 'Maximum recording length reached.',
         'no_sound_detected' => 'Almost no sound was captured — check your microphone and record again.',

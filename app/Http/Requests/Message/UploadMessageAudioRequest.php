@@ -40,7 +40,8 @@ class UploadMessageAudioRequest extends MessageConversationRequest
                 // 'mimetypes:'.implode(',', config('speech.allowed_mime_types', [])),
                 'mimetypes:'.implode(',', $mimeTypes),
                 // 'mimes:webm,ogg,oga,mp3,mp4,m4a,wav',
-                'mimes:'.$extensions,
+                // Browser audio/webm is reported as "weba", which "webm" alone rejects.
+                'mimes:'.$extensions.',weba',
             ],
             // Client-reported duration — primary server-side check for the §5.5 cap.
             'duration_seconds' => $durationRules,

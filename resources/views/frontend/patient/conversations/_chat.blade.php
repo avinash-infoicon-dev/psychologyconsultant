@@ -5,8 +5,8 @@
   $active = $activeConversation ?? null;
   $active?->loadMissing('psychologist.user');
   $quotaService = app(\App\Services\Messaging\ExchangeQuotaService::class);
-  $allowsAudioChannel = $isPsychologist
-      || $quotaService->patientAllowsChannel($authUser, \App\Models\Plan::CHANNEL_AUDIO);
+  // Both people in the thread can send a playable voice message.
+  $allowsAudioChannel = $isPsychologist || $authUser->isPatient();
   // Dictation = record voice → transcript → send as text (allowed on On-demand / Essential).
   $allowsDictationChannel = $isPsychologist
       || $quotaService->patientAllowsChannel($authUser, \App\Models\Plan::CHANNEL_DICTATION);
@@ -618,7 +618,7 @@
           method="post"
           data-chat-composer
           data-chat-store-audio-url="{{ route($routePrefix.'.messages.store-audio', $active->uuid) }}"
-          data-chat-transcribe-url="{{ route($routePrefix.'.speech.transcribe') }}"
+          data-chat-transcribe-url="{{ rtrim(request()->getBasePath(), '/').'/'.($isPsychologist ? 'psychologist' : 'patient').'/voice/transcribe' }}"
           data-chat-audio-allowed="{{ $allowsAudioChannel ? '1' : '0' }}"
           data-chat-dictation-allowed="{{ $allowsDictationChannel ? '1' : '0' }}"
           data-chat-audio-not-allowed="{{ __('message_api.channel_not_allowed_audio') }}"
@@ -724,7 +724,6 @@
                 type="button"
                 class="fe-chat-icon-btn text-xl"
                 data-chat-mic
-                hidden
                 title="{{ __('frontend.chat.record_start') }}"
                 aria-label="{{ __('frontend.chat.record_start') }}"
               >

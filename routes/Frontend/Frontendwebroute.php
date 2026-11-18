@@ -34,6 +34,7 @@ use App\Http\Controllers\Frontend\Psychologist\ProfileSocialLinkController;
 use App\Http\Controllers\Frontend\Psychologist\ResponseTemplateController;
 use App\Http\Controllers\Frontend\Psychologist\TrackingController;
 use App\Http\Controllers\Frontend\Speech\SpeechController;
+use App\Http\Controllers\Frontend\Patient\VoiceTranscriptionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('frontend.locale');
@@ -167,6 +168,8 @@ Route::middleware('auth')->group(function () {
         Route::post('reports', [\App\Http\Controllers\Frontend\ReportController::class, 'store'])->name('reports.store');
         Route::get('reports/{report}', [\App\Http\Controllers\Frontend\ReportController::class, 'show'])->name('reports.show');
         Route::post('reports/{report}/comments', [\App\Http\Controllers\Frontend\ReportController::class, 'comment'])->name('reports.comments.store');
+        
+        Route::post('/voice/transcribe',[VoiceTranscriptionController::class, 'transcribe'])->middleware('throttle:10,1');
     });
 
     Route::middleware('role:psychologist')->prefix('psychologist')->name('frontend.psychologist.')->group(function () {
@@ -244,6 +247,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.mark-read');
 
         Route::post('speech/transcribe', [SpeechController::class, 'transcribe'])->name('speech.transcribe');
+        Route::post('voice/transcribe', [VoiceTranscriptionController::class, 'transcribe'])->middleware('throttle:10,1');
 
         Route::get('relationships', [\App\Http\Controllers\Frontend\Psychologist\RelationshipController::class, 'index'])->name('relationships.index');
         Route::post('relationships/{relationship}/accept', [\App\Http\Controllers\Frontend\Psychologist\RelationshipController::class, 'accept'])->name('relationships.accept');

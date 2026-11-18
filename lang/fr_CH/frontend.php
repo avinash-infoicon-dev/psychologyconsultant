@@ -556,7 +556,7 @@ return [
         'transcribe' => 'Transcrire',
         'transcribing' => 'Transcription...',
         'discard_recording' => 'Supprimer',
-        'recording_ready' => 'Enregistrement prêt — envoyez en vocal ou transcrivez en texte',
+        'recording_ready' => 'Vérifiez le texte. Envoyez le message vocal, ou Supprimer si cette prise est incorrecte.',
         'recording' => 'Enregistrement... appuyez sur le micro pour arrêter',
         'recording_limit_reached' => 'Durée maximale d\'enregistrement atteinte.',
         'no_sound_detected' => 'Presque aucun son capté — vérifiez votre microphone et réenregistrez.',

@@ -133,8 +133,10 @@ class MessageService
         ?string $mimeType = null,
     ): Message {
         return DB::transaction(function () use ($sender, $conversation, $file, $durationSeconds, $mimeType) {
-            // §6.3: On-demand / Essential = text + dictation only (no voice messages).
-            $this->quota->assertChannelAllowed($sender, Plan::CHANNEL_AUDIO);
+            // Patient and psychologist can both send a voice message in the thread.
+            if (! $sender->isPatient() && ! $sender->isPsychologist()) {
+                $this->quota->assertChannelAllowed($sender, Plan::CHANNEL_AUDIO);
+            }
 
             // Combined plan + global audio cap (null = unlimited).
             $maxSeconds = \App\Support\MessagingLimits::maxAudioSeconds($sender);
