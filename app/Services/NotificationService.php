@@ -6,8 +6,10 @@ use App\Events\NotificationPosted;
 use App\Models\Notification as NotificationRecord;
 use App\Models\NotificationPreference;
 use App\Models\User;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class NotificationService
@@ -121,7 +123,15 @@ class NotificationService
 
         if ($record && $useDatabase) {
             $unread = $user->notifications()->whereNull('read_at')->count();
-            event(new NotificationPosted($user, $record, $unread));
+            try {
+                event(new NotificationPosted($user, $record, $unread));
+            } catch (BroadcastException $e) {
+                Log::warning('Notification saved, live broadcast skipped.', [
+                    'user_id' => $user->id,
+                    'notification_id' => $record->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         if ($usePush) {

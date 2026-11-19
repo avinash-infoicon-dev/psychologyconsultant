@@ -15,6 +15,8 @@
   if ($isPatient) {
     if (request()->routeIs('frontend.patient.psychologists.*')) {
       $activeMenu = 'psychologist';
+    } elseif (request()->routeIs('frontend.patient.appointments.*')) {
+      $activeMenu = 'appointments';
     } elseif (request()->routeIs('frontend.patient.conversations.*') || request()->routeIs('frontend.patient.messages.*')) {
       $activeMenu = 'conversations';
     } elseif (request()->routeIs('frontend.patient.subscription.*')) {
@@ -24,7 +26,9 @@
     }
   }
   if ($isPsychologist) {
-    if (request()->routeIs('frontend.psychologist.conversations.*') || request()->routeIs('frontend.psychologist.messages.*')) {
+    if (request()->routeIs('frontend.psychologist.appointments.*')) {
+      $activeMenu = 'appointments';
+    } elseif (request()->routeIs('frontend.psychologist.conversations.*') || request()->routeIs('frontend.psychologist.messages.*')) {
       $activeMenu = 'conversations';
     } elseif (request()->routeIs('frontend.psychologist.absences.*') || request()->routeIs('frontend.psychologist.availability.*')) {
       $activeMenu = 'absences';
@@ -68,6 +72,9 @@
          <a href="{{ route('frontend.patient.psychologists.index') }}" class="rail-icon {{ $activeMenu === 'psychologist' ? 'active' : '' }}" aria-label="{{ __('frontend.dashboard.quick_psychologists') }}">
           <i class="ph ph-brain"></i><span class="rail-tip">{{ __('frontend.dashboard.quick_psychologists') }}</span>
         </a>
+        <a href="{{ route('frontend.patient.appointments.index') }}" class="rail-icon {{ $activeMenu === 'appointments' ? 'active' : '' }}" aria-label="{{ __('frontend.appointments.title') }}">
+          <i class="ph ph-calendar-check"></i><span class="rail-tip">{{ __('frontend.appointments.title') }}</span>
+        </a>
       @endif
 
       @if ($isPsychologist)
@@ -84,6 +91,9 @@
         </button>--}}
         <a href="{{ route('frontend.psychologist.absences.index') }}" class="rail-icon {{ $activeMenu === 'absences' ? 'active' : '' }}" aria-label="{{ __('frontend.absences.title') }}">
           <i class="ph ph-calendar-blank"></i><span class="rail-tip">{{ __('frontend.absences.title') }}</span>
+        </a>
+        <a href="{{ route('frontend.psychologist.appointments.index') }}" class="rail-icon {{ $activeMenu === 'appointments' ? 'active' : '' }}" aria-label="{{ __('frontend.appointments.title') }}">
+          <i class="ph ph-calendar-check"></i><span class="rail-tip">{{ __('frontend.appointments.title') }}</span>
         </a>
       @endif
 
@@ -151,6 +161,14 @@
           </li>
           --}}
         @endif
+      </ul>
+
+      <ul class="twin-menu {{ $activeMenu === 'appointments' ? 'active' : '' }}" data-menu="appointments">
+        <li @class(['active' => request()->routeIs('frontend.patient.appointments.*') || request()->routeIs('frontend.psychologist.appointments.*')])>
+          <a href="{{ $isPatient ? route('frontend.patient.appointments.index') : route('frontend.psychologist.appointments.index') }}">
+            <i class="ph ph-calendar-check"></i><span>{{ __('frontend.appointments.title') }}</span>
+          </a>
+        </li>
       </ul>
 
       @if ($isPatient)

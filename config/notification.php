@@ -47,6 +47,7 @@ return [
         'new_message' => ['database', 'push'],
         'psychologist_response' => ['database', 'push'],
         'patient_request' => ['database'],
+        'appointment' => ['database'],
         'request_accepted' => ['database'],
         'request_rejected' => ['database'],
         'subscription' => ['database', 'mail'],

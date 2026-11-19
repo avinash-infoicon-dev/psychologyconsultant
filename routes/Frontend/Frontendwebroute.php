@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\AppointmentController;
 use App\Http\Controllers\Frontend\Auth\EmailVerificationController;
 use App\Http\Controllers\Frontend\Auth\LoginController;
 use App\Http\Controllers\Frontend\Auth\PasswordResetController;
@@ -165,6 +166,10 @@ Route::middleware('auth')->group(function () {
         Route::post('relationships/{relationship}/close', [\App\Http\Controllers\Frontend\Patient\RelationshipController::class, 'close'])->name('relationships.close');
         Route::post('relationships/{relationship}/activate', [\App\Http\Controllers\Frontend\Patient\RelationshipController::class, 'activate'])->name('relationships.activate');
 
+        Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+        Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+        Route::post('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+
         Route::get('reports', [\App\Http\Controllers\Frontend\ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/create', [\App\Http\Controllers\Frontend\ReportController::class, 'create'])->name('reports.create');
         Route::post('reports', [\App\Http\Controllers\Frontend\ReportController::class, 'store'])->name('reports.store');
@@ -233,6 +238,13 @@ Route::middleware('auth')->group(function () {
         Route::post('availability', [AvailabilityController::class, 'store'])->name('availability.store');
         Route::put('availability/{availability}', [AvailabilityController::class, 'update'])->name('availability.update');
         Route::delete('availability/{availability}', [AvailabilityController::class, 'destroy'])->name('availability.destroy');
+
+        Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+        Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+        Route::post('appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('appointments.confirm');
+        Route::post('appointments/{appointment}/decline', [AppointmentController::class, 'decline'])->name('appointments.decline');
+        Route::post('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+        Route::post('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
 
         Route::get('tracking', [TrackingController::class, 'index'])->name('tracking.index');
 
