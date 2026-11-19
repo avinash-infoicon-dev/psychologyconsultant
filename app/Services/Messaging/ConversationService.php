@@ -16,7 +16,7 @@ class ConversationService
     public function listForUser(User $user, int $perPage = 20): LengthAwarePaginator
     {
         $query = Conversation::query()
-            ->with(['patient.user', 'psychologist.user', 'messages' => fn ($q) => $q->latest()->limit(1)->with('conversation')])
+            ->with(['patient.user', 'psychologist.user', 'messages' => fn ($q) => $q->latest()->limit(1)->with(['conversation', 'document'])])
             ->withCount([
                 'messages as unread_count' => fn ($q) => $q
                     ->where('is_read', false)
@@ -70,7 +70,7 @@ class ConversationService
         return $conversation->load([
             'patient.user',
             'psychologist.user',
-            'messages' => fn ($q) => $q->latest()->limit(1)->with('conversation'),
+            'messages' => fn ($q) => $q->latest()->limit(1)->with(['conversation', 'document']),
         ]);
     }
 
@@ -79,7 +79,7 @@ class ConversationService
         return $conversation->load([
             'patient.user',
             'psychologist.user',
-            'messages' => fn ($q) => $q->with(['sender', 'audio', 'conversation'])->orderBy('created_at'),
+            'messages' => fn ($q) => $q->with(['sender', 'audio', 'document', 'conversation'])->orderBy('created_at'),
         ]);
     }
 
@@ -268,9 +268,7 @@ class ConversationService
                 'uuid' => $conversation->uuid,
                 'name' => $name,
                 'preview' => $latest
-                    ? ($latest->type === 'audio'
-                        ? __('frontend.chat.audio_message')
-                        : \Illuminate\Support\Str::limit($latest->body ?? '—', 72))
+                    ? $latest->chatPreview(72)
                     : __('frontend.chat.no_messages_yet'),
                 'unread' => $unread,
                 'href' => route($prefix.'.conversations.show', $conversation->uuid),

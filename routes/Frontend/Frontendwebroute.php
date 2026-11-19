@@ -155,6 +155,8 @@ Route::middleware('auth')->group(function () {
         Route::post('conversations/{conversation:uuid}/messages', [MessageController::class, 'store'])->name('messages.store');
         Route::post('conversations/{conversation:uuid}/messages/audio', [MessageController::class, 'storeAudio'])->name('messages.store-audio');
         Route::get('messages/{message}/audio', [MessageController::class, 'streamAudio'])->name('messages.audio');
+        Route::post('conversations/{conversation:uuid}/messages/document', [MessageController::class, 'storeDocument'])->name('messages.store-document');
+        Route::get('messages/{message}/document', [MessageController::class, 'downloadDocument'])->name('messages.document');
         Route::post('conversations/{conversation:uuid}/messages/read', [MessageController::class, 'markConversationRead'])->name('messages.mark-conversation-read');
         Route::patch('messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.mark-read');
 
@@ -243,6 +245,8 @@ Route::middleware('auth')->group(function () {
         Route::post('conversations/{conversation:uuid}/messages', [MessageController::class, 'store'])->name('messages.store');
         Route::post('conversations/{conversation:uuid}/messages/audio', [MessageController::class, 'storeAudio'])->name('messages.store-audio');
         Route::get('messages/{message}/audio', [MessageController::class, 'streamAudio'])->name('messages.audio');
+        Route::post('conversations/{conversation:uuid}/messages/document', [MessageController::class, 'storeDocument'])->name('messages.store-document');
+        Route::get('messages/{message}/document', [MessageController::class, 'downloadDocument'])->name('messages.document');
         Route::post('conversations/{conversation:uuid}/messages/read', [MessageController::class, 'markConversationRead'])->name('messages.mark-conversation-read');
         Route::patch('messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.mark-read');
 

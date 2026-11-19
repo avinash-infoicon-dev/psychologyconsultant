@@ -32,7 +32,7 @@ class ExchangeQueueService
             ->with([
                 'patient.user',
                 'patient.subscriptions' => fn ($q) => $q->where('status', 'active')->latest()->with('plan'),
-                'messages' => fn ($q) => $q->latest('id')->limit(1)->with('sender'),
+                'messages' => fn ($q) => $q->latest('id')->limit(1)->with(['sender', 'document']),
             ])
             ->orderByDesc('last_message_at')
             ->limit(100)
@@ -78,7 +78,7 @@ class ExchangeQueueService
             ->with([
                 'psychologist.user',
                 'patient.subscriptions' => fn ($q) => $q->where('status', 'active')->latest()->with('plan'),
-                'messages' => fn ($q) => $q->latest('id')->limit(1)->with('sender'),
+                'messages' => fn ($q) => $q->latest('id')->limit(1)->with(['sender', 'document']),
             ])
             ->orderByDesc('last_message_at')
             ->limit(100)
@@ -156,9 +156,7 @@ class ExchangeQueueService
             'priority_weight' => $priorityWeight,
             'is_priority' => $priorityWeight >= 20,
             'plan_name' => $plan?->name,
-            'preview' => $last->type === 'audio'
-                ? __('frontend.chat.audio_message')
-                : \Illuminate\Support\Str::limit((string) $last->body, 72),
+            'preview' => $last->chatPreview(72),
         ];
     }
 
@@ -192,9 +190,7 @@ class ExchangeQueueService
             'is_overdue' => false,
             'is_priority' => false,
             'plan_name' => $plan?->name,
-            'preview' => $last->type === 'audio'
-                ? __('frontend.chat.audio_message')
-                : \Illuminate\Support\Str::limit((string) $last->body, 72),
+            'preview' => $last->chatPreview(72),
         ];
     }
 }

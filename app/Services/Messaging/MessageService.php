@@ -26,12 +26,13 @@ class MessageService
     public function __construct(
         protected ExchangeQuotaService $quota,
         protected AudioService $audioService,
+        protected DocumentService $documentService,
     ) {}
 
     public function listForConversation(Conversation $conversation, int $perPage = 50): LengthAwarePaginator
     {
         return $conversation->messages()
-            ->with(['audio', 'conversation'])
+            ->with(['audio', 'document', 'conversation'])
             ->orderBy('created_at')
             ->paginate($perPage);
     }
@@ -39,7 +40,7 @@ class MessageService
     public function listNewestForConversation(Conversation $conversation, int $perPage = 30): LengthAwarePaginator
     {
         return $conversation->messages()
-            ->with(['sender', 'audio'])
+            ->with(['sender', 'audio', 'document'])
             ->latest('created_at')
             ->latest('id')
             ->paginate($perPage);
@@ -53,7 +54,7 @@ class MessageService
     public function listAfterId(Conversation $conversation, int $afterId, int $limit = 50)
     {
         return $conversation->messages()
-            ->with(['sender', 'audio'])
+            ->with(['sender', 'audio', 'document'])
             ->where('id', '>', $afterId)
             ->orderBy('id')
             ->limit($limit)
@@ -186,6 +187,59 @@ class MessageService
             $this->quota->recordExchangeMessage($sender, $conversation);
 
             $message = $message->fresh(['audio', 'sender']);
+            $message->setRelation('conversation', $conversation);
+            $message->loadMissing(['conversation.patient.user', 'conversation.psychologist.user']);
+
+            event(new MessageSent($message));
+
+            return $message;
+        });
+    }
+
+    /**
+     * @throws QuotaExceededException
+     * @throws PsychologistUnavailableException
+     * @throws \App\Exceptions\ExchangeMessageLimitException
+     */
+    public function sendDocument(User $sender, Conversation $conversation, UploadedFile $file): Message
+    {
+        $sample = file_get_contents($file->getRealPath(), false, null, 0, 1024);
+        if (! is_string($sample) || ! str_contains($sample, '%PDF-')) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'document' => [__('frontend.chat.pdf_only')],
+            ]);
+        }
+
+        $maxBytes = \App\Http\Requests\Message\UploadMessageDocumentRequest::MAX_KILOBYTES * 1024;
+        if (($file->getSize() ?: 0) > $maxBytes) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'document' => [__('frontend.chat.pdf_too_large', ['size' => 10])],
+            ]);
+        }
+
+        return DB::transaction(function () use ($sender, $conversation, $file) {
+            $this->assertPsychologistAvailable($conversation);
+            $this->quota->consumeIfStartingExchange($sender, $conversation);
+            $this->quota->assertExchangeMessageAllowed($sender, $conversation);
+
+            $message = $conversation->messages()->create([
+                'sender_id' => $sender->id,
+                'type' => 'document',
+            ]);
+
+            $this->documentService->store($message, $file);
+
+            $conversation->update(['last_message_at' => now()]);
+
+            if ($sender->isPatient()) {
+                $this->quota->openOrContinueExchange($sender, $conversation, $message);
+            } else {
+                $this->quota->completePendingExchange($sender, $conversation, $message);
+            }
+
+            $this->quota->recordExchangeMessage($sender, $conversation);
+
+            $message = $message->fresh(['document', 'sender']);
             $message->setRelation('conversation', $conversation);
             $message->loadMissing(['conversation.patient.user', 'conversation.psychologist.user']);
 

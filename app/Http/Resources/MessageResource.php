@@ -30,6 +30,13 @@ class MessageResource extends JsonResource
                     'language' => $this->audio->language,
                 ] : null;
             }),
+            'document' => $this->when($this->type === 'document', function () {
+                return $this->document ? [
+                    'original_name' => $this->document->original_name,
+                    'size_bytes' => $this->document->size_bytes,
+                    'size_label' => $this->document->sizeLabel(),
+                ] : null;
+            }),
             'is_read' => $this->is_read,
             'status' => $this->is_read ? 'read' : 'sent',
             'read_at' => $this->read_at?->toIso8601String(),

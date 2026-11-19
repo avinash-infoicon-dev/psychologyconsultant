@@ -106,6 +106,7 @@
   data-chat-theme="normal"
   data-chat-list-url="{{ route($routePrefix.'.conversations.index') }}"
   data-chat-audio-url-pattern="{{ url(($isPsychologist ? 'psychologist' : 'patient').'/messages/__ID__/audio') }}"
+  data-chat-document-url-pattern="{{ url(($isPsychologist ? 'psychologist' : 'patient').'/messages/__ID__/document') }}"
   data-chat-user-id="{{ $authUser->id }}"
   data-chat-peer-avatar="{{ $peerAvatarUrl }}"
   data-presence-online="{{ __('frontend.chat.online') }}"
@@ -229,7 +230,7 @@
             $itemPeerUserId = $itemPeer?->user_id ?? $itemPeer?->user?->id;
             $latest = $item->messages->first();
             $preview = $latest
-                ? ($latest->type === 'audio' ? __('frontend.chat.audio_message') : \Illuminate\Support\Str::limit($latest->body ?? '—', 48))
+                ? $latest->chatPreview(48)
                 : __('frontend.chat.no_messages_yet');
             $unread = (int) ($item->unread_count ?? 0);
           @endphp
@@ -307,7 +308,7 @@
               @foreach ($items as $item)
                 @php
                   $latest = $item->messages->first();
-                  $preview = $item->last_message_at ? ($item->last_message_at->format('M d, Y') . ' • ' . ($latest ? \Illuminate\Support\Str::limit($latest->body ?? '—', 28) : '')) : 'Ended';
+                  $preview = $item->last_message_at ? ($item->last_message_at->format('M d, Y') . ' • ' . ($latest ? $latest->chatPreview(28) : '')) : 'Ended';
                 @endphp
                 <a
                   href="{{ route($routePrefix.'.conversations.show', $item->uuid) }}"
@@ -468,6 +469,8 @@
         data-chat-user-id="{{ $authUser->id }}"
         data-chat-last-id="{{ $messages->last()?->id ?? 0 }}"
         data-chat-audio-label="{{ __('frontend.chat.audio_message') }}"
+        data-chat-document-label="{{ __('frontend.chat.document_message') }}"
+        data-chat-document-open="{{ __('frontend.chat.open_document') }}"
         data-chat-today-label="{{ __('frontend.chat.today') }}"
         data-chat-yesterday-label="{{ __('frontend.chat.yesterday') }}"
         data-chat-sent-label="{{ __('frontend.chat.status_sent') }}"
@@ -532,6 +535,21 @@
                         <span class="fe-chat-audio__duration">{{ gmdate($message->audio->duration_seconds >= 3600 ? 'H:i:s' : 'i:s', $message->audio->duration_seconds) }}</span>
                       @endif
                     @endif
+                  </div>
+                @elseif ($message->type === 'document')
+                  <div class="fe-chat-document">
+                    <i class="bi bi-file-earmark-pdf fe-chat-document__icon"></i>
+                    <div>
+                      <p class="fe-chat-document__name">{{ $message->document?->original_name ?: __('frontend.chat.document_message') }}</p>
+                      @if ($message->document?->size_bytes)
+                        <p class="fe-chat-document__meta">{{ $message->document->sizeLabel() }}</p>
+                      @endif
+                      @if ($message->document)
+                        <a class="fe-chat-document__link" href="{{ route($routePrefix.'.messages.document', $message) }}" target="_blank" rel="noopener">
+                          {{ __('frontend.chat.open_document') }}
+                        </a>
+                      @endif
+                    </div>
                   </div>
                 @else
                   <p class="mb-3">{{ $message->body }}</p>
@@ -618,6 +636,11 @@
           method="post"
           data-chat-composer
           data-chat-store-audio-url="{{ route($routePrefix.'.messages.store-audio', $active->uuid) }}"
+          data-chat-store-document-url="{{ route($routePrefix.'.messages.store-document', $active->uuid) }}"
+          data-chat-pdf-only="{{ __('frontend.chat.pdf_only') }}"
+          data-chat-pdf-too-large="{{ __('frontend.chat.pdf_too_large', ['size' => 10]) }}"
+          data-chat-sending-document="{{ __('frontend.chat.sending_document') }}"
+          data-chat-send-document-failed="{{ __('frontend.chat.send_document_failed') }}"
           data-chat-transcribe-url="{{ rtrim(request()->getBasePath(), '/').'/'.($isPsychologist ? 'psychologist' : 'patient').'/voice/transcribe' }}"
           data-chat-audio-allowed="{{ $allowsAudioChannel ? '1' : '0' }}"
           data-chat-dictation-allowed="{{ $allowsDictationChannel ? '1' : '0' }}"
@@ -717,6 +740,10 @@
             @endif
           </div>
           <div class="chat-message-box-action">
+            <label class="fe-chat-icon-btn text-xl mb-0" title="{{ __('frontend.chat.attach_pdf') }}" aria-label="{{ __('frontend.chat.attach_pdf') }}">
+              <i class="bi bi-file-earmark-pdf" data-chat-document-icon></i>
+              <input type="file" accept="application/pdf,.pdf" data-chat-document hidden>
+            </label>
             {{-- Mic: shown when audio messages OR dictation is allowed.
                  “Send voice” is controlled separately (audio channel only). --}}
             @if ($allowsMic)
@@ -818,3 +845,33 @@
     </div>
   </dialog>
 @endif
+
+@push('styles')
+  <style>
+    .fe-chat-document {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      min-width: 220px;
+      margin-bottom: 0.75rem;
+    }
+    .fe-chat-document__icon {
+      font-size: 1.75rem;
+      line-height: 1;
+      color: #c0392b;
+    }
+    .fe-chat-document__name {
+      margin: 0 0 0.15rem;
+      font-weight: 600;
+      word-break: break-word;
+    }
+    .fe-chat-document__meta,
+    .fe-chat-document__link {
+      margin: 0;
+      font-size: 0.8rem;
+    }
+    label.fe-chat-icon-btn {
+      cursor: pointer;
+    }
+  </style>
+@endpush

@@ -7,16 +7,19 @@ use App\Exceptions\ExchangeMessageLimitException;
 use App\Exceptions\PsychologistUnavailableException;
 use App\Exceptions\QuotaExceededException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Message\DownloadMessageDocumentRequest;
 use App\Http\Requests\Message\ListMessagesRequest;
 use App\Http\Requests\Message\MarkConversationReadRequest;
 use App\Http\Requests\Message\MarkMessageReadRequest;
 use App\Http\Requests\Message\SendMessageRequest;
 use App\Http\Requests\Message\StreamMessageAudioRequest;
 use App\Http\Requests\Message\UploadMessageAudioRequest;
+use App\Http\Requests\Message\UploadMessageDocumentRequest;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\Messaging\AudioService;
+use App\Services\Messaging\DocumentService;
 use App\Services\Messaging\ExchangeQuotaService;
 use App\Services\Messaging\MessageService;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +33,7 @@ class MessageController extends Controller
     public function __construct(
         protected MessageService $messages,
         protected AudioService $audioService,
+        protected DocumentService $documentService,
         protected ExchangeQuotaService $quota,
     ) {}
 
@@ -122,6 +126,55 @@ class MessageController extends Controller
         return redirect()
             ->route($this->conversationsShowRoute($request->user()), $conversation)
             ->with('success', __('message_api.audio_sent'));
+    }
+
+    public function storeDocument(UploadMessageDocumentRequest $request, Conversation $conversation): JsonResponse|RedirectResponse
+    {
+        try {
+            $message = $this->messages->sendDocument(
+                $request->user(),
+                $conversation,
+                $request->file('document'),
+            );
+        } catch (QuotaExceededException) {
+            return $this->quotaExceededResponse($request, $conversation);
+        } catch (ExchangeMessageLimitException $e) {
+            return $this->exchangeMessageLimitResponse($request, $e, $conversation);
+        } catch (PsychologistUnavailableException $e) {
+            return $this->psychologistUnavailableResponse($request, $e);
+        }
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'data' => $this->messagePayload($message->loadMissing(['sender', 'document'])),
+                'exchange_message_usage' => $this->exchangeMessageUsagePayload($conversation, $request->user()),
+            ], 201);
+        }
+
+        return redirect()
+            ->route($this->conversationsShowRoute($request->user()), $conversation)
+            ->with('success', __('frontend.chat.document_sent'));
+    }
+
+    public function downloadDocument(DownloadMessageDocumentRequest $request, Message $message): Response
+    {
+        $message->loadMissing('document');
+
+        if (! $message->isDocument() || ! $message->document) {
+            abort(404);
+        }
+
+        $bytes = $this->documentService->retrieveBytes($message->document);
+        $name = str_replace(['"', "\r", "\n"], '', $message->document->original_name);
+        $name = \Illuminate\Support\Str::ascii($name) ?: 'document.pdf';
+
+        return response($bytes, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Length' => (string) strlen($bytes),
+            'Content-Disposition' => 'inline; filename="'.$name.'"',
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control' => 'private, no-store',
+        ]);
     }
 
     public function streamAudio(StreamMessageAudioRequest $request, Message $message): Response|StreamedResponse
@@ -255,7 +308,7 @@ class MessageController extends Controller
 
     protected function messagePayload(Message $message): array
     {
-        $message->loadMissing(['sender', 'audio']);
+        $message->loadMissing(['sender', 'audio', 'document']);
 
         $payload = [
             'id' => $message->id,
@@ -278,7 +331,23 @@ class MessageController extends Controller
             ];
         }
 
+        if ($message->type === 'document' && $message->document) {
+            $payload['document'] = [
+                'url' => route($this->messagesDocumentRoute(), $message),
+                'original_name' => $message->document->original_name,
+                'size_bytes' => $message->document->size_bytes,
+                'size_label' => $message->document->sizeLabel(),
+            ];
+        }
+
         return $payload;
+    }
+
+    protected function messagesDocumentRoute(): string
+    {
+        $user = request()->user();
+
+        return ($user?->isPsychologist() ? 'frontend.psychologist' : 'frontend.patient').'.messages.document';
     }
 
     protected function messagesAudioRoute(): string

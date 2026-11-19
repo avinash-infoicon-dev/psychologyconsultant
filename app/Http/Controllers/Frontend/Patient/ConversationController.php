@@ -45,9 +45,7 @@ class ConversationController extends Controller
                         'status' => $item->status,
                         'name' => $name,
                         'preview' => $latest
-                            ? ($latest->type === 'audio'
-                                ? __('frontend.chat.audio_message')
-                                : \Illuminate\Support\Str::limit($latest->body ?? '—', 48))
+                            ? $latest->chatPreview(48)
                             : __('frontend.chat.no_messages_yet'),
                         'time' => optional($item->last_message_at ?? $item->updated_at)->format('H:i'),
                         'unread' => (int) ($item->unread_count ?? 0),

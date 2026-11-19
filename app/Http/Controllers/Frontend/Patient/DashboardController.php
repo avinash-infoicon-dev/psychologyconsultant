@@ -9,7 +9,6 @@ use App\Support\PsychologistCareStatus;
 use App\Services\Messaging\ExchangeQueueService;
 use App\Services\Messaging\ExchangeQuotaService;
 use App\Services\PatientPsychologistRelationshipService;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -95,7 +94,7 @@ class DashboardController extends Controller
         }
 
         $conversation = Conversation::query()
-            ->with(['messages' => fn ($q) => $q->latest('id')->limit(1)])
+            ->with(['messages' => fn ($q) => $q->latest('id')->limit(1)->with('document')])
             ->where('patient_id', $patient->id)
             ->where('psychologist_id', $professional->id)
             ->orderByDesc('last_message_at')
@@ -122,11 +121,7 @@ class DashboardController extends Controller
         return [
             'psychologist_name' => $name,
             'psychologist_uuid' => $professional->uuid,
-            'last_message' => $latest
-                ? ($latest->type === 'audio'
-                    ? __('frontend.chat.audio_message')
-                    : Str::limit($latest->body ?? '—', 90))
-                : null,
+            'last_message' => $latest ? $latest->chatPreview(90) : null,
             'last_message_at' => $conversation?->last_message_at,
             'response_pending' => $pendingForThis,
             // Old: continue whenever a conversation and active relationship existed.

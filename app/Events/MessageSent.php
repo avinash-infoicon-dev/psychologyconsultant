@@ -26,6 +26,7 @@ class MessageSent implements ShouldBroadcast, ShouldDispatchAfterCommit
             'conversation.patient.user',
             'conversation.psychologist.user',
             'audio',
+            'document',
         ]);
     }
 
@@ -72,6 +73,14 @@ class MessageSent implements ShouldBroadcast, ShouldDispatchAfterCommit
                 'duration_seconds' => $this->message->audio?->duration_seconds,
                 'transcript' => $this->message->audio?->transcript,
                 'transcription_status' => $this->message->audio?->transcription_status,
+            ];
+        }
+
+        if ($this->message->type === 'document') {
+            $payload['document'] = [
+                'original_name' => $this->message->document?->original_name,
+                'size_bytes' => $this->message->document?->size_bytes,
+                'size_label' => $this->message->document?->sizeLabel(),
             ];
         }
 

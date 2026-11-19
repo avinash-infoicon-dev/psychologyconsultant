@@ -44,9 +44,36 @@ class Message extends Model
         return $this->hasOne(AudioMessage::class);
     }
 
+    public function document(): HasOne
+    {
+        return $this->hasOne(DocumentMessage::class);
+    }
+
     public function isAudio(): bool
     {
         return $this->type === 'audio';
+    }
+
+    public function isDocument(): bool
+    {
+        return $this->type === 'document';
+    }
+
+    public function chatPreview(int $limit = 48): string
+    {
+        if ($this->type === 'audio') {
+            return __('frontend.chat.audio_message');
+        }
+
+        if ($this->type === 'document') {
+            $name = $this->document?->original_name;
+
+            return $name
+                ? \Illuminate\Support\Str::limit($name, $limit)
+                : __('frontend.chat.document_message');
+        }
+
+        return \Illuminate\Support\Str::limit($this->body ?? '—', $limit);
     }
 
     public function markAsRead(): void

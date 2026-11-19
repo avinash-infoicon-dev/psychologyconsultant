@@ -24,9 +24,11 @@ class NewMessageNotification
         //     ? 'Sent a voice message'
         //     : \Illuminate\Support\Str::limit($message->body, 80);
 
-        $safeHint = $message->type === 'audio'
-            ? __('frontend.notifications.new_message_audio_hint')
-            : __('frontend.notifications.new_message_text_hint');
+        $safeHint = match ($message->type) {
+            'audio' => __('frontend.notifications.new_message_audio_hint'),
+            'document' => __('frontend.notifications.new_message_document_hint'),
+            default => __('frontend.notifications.new_message_text_hint'),
+        };
 
         $message->loadMissing('conversation');
 
