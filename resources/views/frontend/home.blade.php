@@ -72,7 +72,7 @@
                         <div class="tp-showcase-slider-bg"
                             data-background="{{ $slider->image_url }}"
                             data-swiper-parallax="1152">
-                            <div class="container container-1300">
+                            <div class="container container-1750">
                                 <div class="row">
                                     <div class="tp-showcase-slider-content z-index-2">
                                         @if ($slider->subtitle)
@@ -83,6 +83,8 @@
                                                 href="{{ $slider->button_url ?: '#contact-form' }}"><span>{{ $slider->title }}</span></a>
                                           </h1>
                                         @endif
+                                        <p class="tp-showcase-slider-subtitle-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem officiis, aperiam, quaerat dolore cumque dignissimos minima animi</p>
+
                                         @if ($slider->button_text)
                                           @include('frontend.partials.home-slider-cta', [
                                             #'href' => $slider->button_url,
@@ -424,7 +426,7 @@
 
 
     <!-- about area start -->
-    <div class="cst-about-ptb p-relative pt-170 pb-120">
+    <div class="cst-about-ptb p-relative pt-120 pb-120">
         <!-- <div class="cst-about-shape d-none d-xxl-block" data-speed=".9">
             <img src="{{ asset('frontendassets/assets/img/about/about-shape-1.webp') }}" alt="">
         </div> -->
@@ -698,7 +700,7 @@
 
 
     <!-- video area start -->
-    <div class="cst-video-ptb p-relative pb-160">
+    <div class="cst-video-ptb p-relative pb-120 d-none">
         <div class="container container-1530">
             <div class="row">
                 <div class="col-lg-12">
@@ -950,7 +952,7 @@
     ])
   @if (false)
     <!-- team area start -->
-    <div class="cst-team-ptb pt-140 pb-80">
+    <div class="cst-team-ptb pt-120 pb-80">
         <div class="container container-1530">
             <div class="row align-items-end">
                 <div class="col-lg-6">
@@ -1376,7 +1378,7 @@
     ])
   @if (false)
     <!-- faq area start -->
-    <div class="cst-faq-ptb p-relative pt-140 pb-120">
+    <div class="cst-faq-ptb p-relative pt-120 pb-120">
         <div class="container container-1530">
             <div class="row">
 

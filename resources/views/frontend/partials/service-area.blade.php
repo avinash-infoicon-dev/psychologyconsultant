@@ -5,7 +5,7 @@
   $items = \App\Services\Cms\CmsServicesPageService::frontendCards($servicesPage);
 @endphp
 <!-- service area start -->
-    <div class="cst-service-ptb pt-120 pb-120" data-bg-color="#F3F1F2">
+    <div class="cst-service-ptb pt-120 pb-120" data-bg-color="#eaeaea">
         <div class="container container-1530">
             <div class="row">
                 <div class="col-lg-12">

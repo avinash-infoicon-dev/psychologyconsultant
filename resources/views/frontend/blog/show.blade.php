@@ -18,7 +18,7 @@
                  <div class="col-xl-12">
                      <div class="tp-hero-2-content text-center mb-25">
                          <span class="tp-hero-2-subtitle tp_fade_anim" data-delay=".3">{{ __('frontend.blog.title') }}</span>
-                         <h1 class="tp-hero-2-title text-scale-anim font-bold tp_fade_anim" data-delay=".5">{{ $post->title }}</h1>
+                         <h1 class="tp-hero-2-title small-title text-scale-anim font-bold tp_fade_anim" data-delay=".5">{{ $post->title }}</h1>
                      </div>
                  </div>
              </div>

@@ -69,7 +69,7 @@
 
 
     <!-- video area start -->
-    <div class="cst-video-ptb p-relative pb-160">
+    <div class="cst-video-ptb p-relative pb-120 d-none">
         <div class="container container-1530">
             <div class="row">
                 <div class="col-lg-12">
