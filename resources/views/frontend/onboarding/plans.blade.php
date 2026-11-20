@@ -57,8 +57,8 @@
               $icons = ['price-icon1.png', 'price-icon2.png', 'price-icon3.png'];
               $icon = $icons[$variant];
             @endphp
-            <div class="col-xxl-4 col-md-6">
-              <div class="onboarding-plan onboarding-plan--{{ $variant }}">
+            <div class="col-xxl-3 col-md-6">
+              <div class="onboarding-plan onboarding-plan--1">
                 @if ($plan->is_recommended)
                   <span class="onboarding-plan__badge">{{ __('frontend.onboarding.popular') }}</span>
                 @endif
