@@ -52,6 +52,9 @@
                 @if ($slider->subtitle)
                   <div class="text-muted small">{{ $slider->subtitle }}</div>
                 @endif
+                @if ($slider->para_text)
+                  <div class="text-muted small">{{ \Illuminate\Support\Str::limit($slider->para_text, 80) }}</div>
+                @endif
               </td>
               <td>
                 @if ($slider->button_text)

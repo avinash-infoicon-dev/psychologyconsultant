@@ -61,6 +61,7 @@
 
   <main>
   @php($homeSliders = $homeSliders ?? collect())
+  
   @if ($homeSliders->isNotEmpty())
   <section class="tp-showcase-slider">
         <div class="tp-showcase-slider-main p-relative">
@@ -83,7 +84,10 @@
                                                 href="{{ $slider->button_url ?: '#contact-form' }}"><span>{{ $slider->title }}</span></a>
                                           </h1>
                                         @endif
-                                        <p class="tp-showcase-slider-subtitle-p">Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem officiis, aperiam, quaerat dolore cumque dignissimos minima animi</p>
+
+                                        @if ($slider->para_text)
+                                        <p class="tp-showcase-slider-subtitle-p">{{ $slider->para_text }}</p>
+                                        @endif
 
                                         @if ($slider->button_text)
                                           @include('frontend.partials.home-slider-cta', [
@@ -627,7 +631,7 @@
     <!-- hero area end -->
 
 
-    @include('frontend.partials.feature-area', ['homePage' => $homePage ?? null])
+    @include('frontend.partials.feature-area', ['homePage' => $homePage ?? null, 'plans' => $plans ?? collect()])
     @if (false)
     {{-- Previous hardcoded feature + video area (kept for reference) --}}
     <!-- feature area start -->

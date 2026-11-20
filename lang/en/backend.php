@@ -781,6 +781,7 @@ return [
             'updated' => 'Slide updated successfully.',
             'deleted' => 'Slide deleted successfully.',
             'subtitle' => 'Subtitle',
+            'para_text' => 'Paragraph',
             'button' => 'Button',
             'button_text' => 'Button text',
             'button_url' => 'Button link',

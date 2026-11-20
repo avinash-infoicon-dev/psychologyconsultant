@@ -8,6 +8,7 @@ use App\Models\CmsPage;
 use App\Models\HomeSlider;
 use App\Models\CmsTeamMember;
 use App\Models\CmsTestimonial;
+use App\Models\Plan;
 use App\Models\Professional;
 use App\Services\Cms\CmsHomePageService;
 use App\Services\Cms\CmsServicesPageService;
@@ -21,8 +22,8 @@ class HomeController extends Controller
             ->active()
             ->with('translations')
             ->orderBy('sort_order')
-            ->get();
-
+            ->get(); 
+        
         $testimonials = CmsTestimonial::query()
             ->active()
             ->with('translations')
@@ -69,6 +70,13 @@ class HomeController extends Controller
         $homePage = app(CmsHomePageService::class)->published()
             ?? app(CmsHomePageService::class)->ensure();
 
-        return view('frontend.home', compact('homeSliders', 'testimonials', 'teamMembers', 'psychologists', 'aboutPage', 'faqs', 'faqPage', 'servicesPage', 'homePage'));
+        $plans = Plan::query()
+            ->with('translations')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
+        return view('frontend.home', compact('homeSliders', 'testimonials', 'teamMembers', 'psychologists', 'aboutPage', 'faqs', 'faqPage', 'servicesPage', 'homePage', 'plans'));
     }
 }

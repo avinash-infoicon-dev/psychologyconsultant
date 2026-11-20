@@ -781,6 +781,7 @@ return [
             'updated' => 'Diapositive mise à jour avec succès.',
             'deleted' => 'Diapositive supprimée avec succès.',
             'subtitle' => 'Sous-titre',
+            'para_text' => 'Paragraphe',
             'button' => 'Bouton',
             'button_text' => 'Texte du bouton',
             'button_url' => 'Lien du bouton',

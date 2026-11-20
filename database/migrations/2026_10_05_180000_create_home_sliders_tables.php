@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('locale', 10);
             $table->string('subtitle')->nullable();
             $table->string('title');
+            $table->text('para_text')->nullable();
             $table->string('button_text')->nullable();
             $table->string('button_url')->nullable();
             $table->string('image_path')->nullable();

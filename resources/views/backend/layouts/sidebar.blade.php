@@ -183,7 +183,7 @@
                 </li>
                 --}}
               @endpermission
-              {{-- @permission('cms.sliders.view')
+              @permission('cms.sliders.view')
                 <li class="nav-item">
                   <a href="{{ route('admin.cms.sliders.index') }}" class="nav-link @if(request()->routeIs('admin.cms.sliders.*')) active @endif">
                     <i class="nav-icon bi bi-images"></i>
@@ -191,7 +191,7 @@
                   </a>
                 </li>
               @endpermission
-              @permission('cms.testimonials.view')
+              {{-- @permission('cms.testimonials.view')
                 <li class="nav-item">
                   <a href="{{ route('admin.cms.testimonials.index') }}" class="nav-link @if(request()->routeIs('admin.cms.testimonials.*')) active @endif">
                     <i class="nav-icon bi bi-chat-quote"></i>

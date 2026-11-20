@@ -16,11 +16,12 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-1.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => 'Psychology Care', 'title' => 'Mental Wellness', 'button_text' => 'Book Consultation'],
+                    'en' => ['subtitle' => 'Psychology Care', 'title' => 'Mental Wellness', 'para_text' => 'Professional psychological support, tailored to you.', 'button_text' => 'Book Consultation'],
                     'fr_CH' => [
                         // 'button_text' => 'Prendre rendez-vous',
                         'subtitle' => 'Soins psychologiques',
                         'title' => 'Bien-être mental',
+                        'para_text' => 'Un accompagnement psychologique professionnel, adapté à vous.',
                         'button_text' => 'Réserver une consultation',
                     ],
                     /* Disabled locale (use FR/EN only) — kept for reference
@@ -36,11 +37,12 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-2.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => null, 'title' => 'Expert Guidance', 'button_text' => 'Book Consultation'],
+                    'en' => ['subtitle' => null, 'title' => 'Expert Guidance', 'para_text' => 'Talk with licensed psychologists who understand your needs.', 'button_text' => 'Book Consultation'],
                     'fr_CH' => [
                         // 'button_text' => 'Prendre rendez-vous',
                         'subtitle' => null,
                         'title' => 'Conseils d’experts',
+                        'para_text' => 'Échangez avec des psychologues diplômés qui comprennent vos besoins.',
                         'button_text' => 'Réserver une consultation',
                     ],
                     /* Disabled locale (use FR/EN only) — kept for reference
@@ -56,8 +58,8 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-3.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => 'Private & Secure', 'title' => 'Confidential Care', 'button_text' => 'Get Started'],
-                    'fr_CH' => ['subtitle' => 'Privé et sécurisé', 'title' => 'Soins confidentiels', 'button_text' => 'Commencer'],
+                    'en' => ['subtitle' => 'Private & Secure', 'title' => 'Confidential Care', 'para_text' => 'Your conversations stay private, secure, and confidential.', 'button_text' => 'Get Started'],
+                    'fr_CH' => ['subtitle' => 'Privé et sécurisé', 'title' => 'Soins confidentiels', 'para_text' => 'Vos échanges restent privés, sécurisés et confidentiels.', 'button_text' => 'Commencer'],
                     /* Disabled locale (use FR/EN only) — kept for reference
                     'de' => ['subtitle' => 'Privat & Sicher', 'title' => 'Vertrauliche Betreuung', 'button_text' => 'Loslegen'],
                     */
@@ -71,8 +73,8 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-4.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => 'Online Support', 'title' => 'Consult Anytime', 'button_text' => 'Book Consultation'],
-                    'fr_CH' => ['subtitle' => 'Support en ligne', 'title' => 'Consultez à tout moment', 'button_text' => 'Réserver une consultation'],
+                    'en' => ['subtitle' => 'Online Support', 'title' => 'Consult Anytime', 'para_text' => 'Book a session online, whenever it suits you.', 'button_text' => 'Book Consultation'],
+                    'fr_CH' => ['subtitle' => 'Support en ligne', 'title' => 'Consultez à tout moment', 'para_text' => 'Réservez une séance en ligne, au moment qui vous convient.', 'button_text' => 'Réserver une consultation'],
                     /* Disabled locale (use FR/EN only) — kept for reference
                     'de' => ['subtitle' => 'Online-Support', 'title' => 'Jederzeit konsultieren', 'button_text' => 'Konsultation buchen'],
                     */
@@ -86,8 +88,8 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-5.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => 'Dual Expertise', 'title' => 'Psychology', 'button_text' => 'Learn More'],
-                    'fr_CH' => ['subtitle' => 'Double expertise', 'title' => 'Psychologie', 'button_text' => 'En savoir plus'],
+                    'en' => ['subtitle' => 'Dual Expertise', 'title' => 'Psychology', 'para_text' => 'Care that brings psychology and practical guidance together.', 'button_text' => 'Learn More'],
+                    'fr_CH' => ['subtitle' => 'Double expertise', 'title' => 'Psychologie', 'para_text' => 'Un accompagnement qui relie psychologie et conseils pratiques.', 'button_text' => 'En savoir plus'],
                     /* Disabled locale (use FR/EN only) — kept for reference
                     'de' => ['subtitle' => 'Duale Expertise', 'title' => 'Psychologie', 'button_text' => 'Mehr erfahren'],
                     */
@@ -101,8 +103,8 @@ class HomeSliderSeeder extends Seeder
                 'image' => 'frontendassets/assets/img/hero/slider-6.webp',
                 'button_url' => '#contact-form',
                 'translations' => [
-                    'en' => ['subtitle' => 'Trusted Experts', 'title' => 'Licensed Advisors', 'button_text' => 'Book Consultation'],
-                    'fr_CH' => ['subtitle' => 'Experts de confiance', 'title' => 'Conseillers diplômés', 'button_text' => 'Réserver une consultation'],
+                    'en' => ['subtitle' => 'Trusted Experts', 'title' => 'Licensed Advisors', 'para_text' => 'Work with trusted, licensed professionals.', 'button_text' => 'Book Consultation'],
+                    'fr_CH' => ['subtitle' => 'Experts de confiance', 'title' => 'Conseillers diplômés', 'para_text' => 'Travaillez avec des professionnels de confiance et diplômés.', 'button_text' => 'Réserver une consultation'],
                     /* Disabled locale (use FR/EN only) — kept for reference
                     'de' => ['subtitle' => 'Vertrauenswürdige Experten', 'title' => 'Lizenzierte Berater', 'button_text' => 'Konsultation buchen'],
                     */
@@ -126,6 +128,7 @@ class HomeSliderSeeder extends Seeder
                     [
                         'subtitle' => $row['subtitle'],
                         'title' => $row['title'],
+                        'para_text' => $row['para_text'] ?? null,
                         'button_text' => $row['button_text'],
                         'button_url' => $slide['button_url'],
                         'image_path' => $slide['image'],

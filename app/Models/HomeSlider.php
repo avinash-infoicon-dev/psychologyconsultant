@@ -44,6 +44,11 @@ class HomeSlider extends Model
         return $this->translate()?->title;
     }
 
+    public function getParaTextAttribute(): ?string
+    {
+        return $this->translate()?->para_text;
+    }
+
     public function getButtonTextAttribute(): ?string
     {
         return $this->translate()?->button_text;

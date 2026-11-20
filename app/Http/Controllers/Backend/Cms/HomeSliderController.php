@@ -24,6 +24,7 @@ class HomeSliderController extends Controller
                 $query->whereHas('translations', function ($t) use ($q) {
                     $t->where('title', 'like', $q)
                         ->orWhere('subtitle', 'like', $q)
+                        ->orWhere('para_text', 'like', $q)
                         ->orWhere('button_text', 'like', $q);
                 });
             })
@@ -106,6 +107,7 @@ class HomeSliderController extends Controller
         foreach (Locales::codes() as $locale) {
             $localeRules["translations.{$locale}.title"] = ['required', 'string', 'max:255'];
             $localeRules["translations.{$locale}.subtitle"] = ['nullable', 'string', 'max:255'];
+            $localeRules["translations.{$locale}.para_text"] = ['nullable', 'string', 'max:5000'];
             $localeRules["translations.{$locale}.button_text"] = ['nullable', 'string', 'max:255'];
             $localeRules["translations.{$locale}.button_url"] = ['nullable', 'string', 'max:500'];
             $localeRules["translations.{$locale}.image"] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'];
@@ -178,6 +180,7 @@ class HomeSliderController extends Controller
             $row['image_path'] = $path;
             $row['image_original_name'] = $originalName;
             $row['button_url'] = $row['button_url'] ?: '#contact-form';
+            $row['para_text'] = $row['para_text'] ?? '';
 
             $slider->translations()->updateOrCreate(
                 ['locale' => $locale],

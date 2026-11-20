@@ -762,6 +762,7 @@ return [
             'updated' => 'Slide aggiornata con successo.',
             'deleted' => 'Slide eliminata con successo.',
             'subtitle' => 'Sottotitolo',
+            'para_text' => 'Paragrafo',
             'button' => 'Pulsante',
             'button_text' => 'Testo del pulsante',
             'button_url' => 'Link del pulsante',

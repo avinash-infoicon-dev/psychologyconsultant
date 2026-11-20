@@ -35,6 +35,10 @@
         <input type="text" name="translations[{{ $locale }}][title]" id="title_{{ $locale }}" class="form-control"
           value="{{ old("translations.$locale.title", $tr?->title) }}" required>
       </div>
+      <div class="mb-3">
+        <label class="form-label" for="para_text_{{ $locale }}">{{ __('backend.cms.sliders.para_text') }}</label>
+        <textarea name="translations[{{ $locale }}][para_text]" id="para_text_{{ $locale }}" class="form-control" rows="4">{{ old("translations.$locale.para_text", $tr?->para_text) }}</textarea>
+      </div>
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label" for="button_text_{{ $locale }}">{{ __('backend.cms.sliders.button_text') }}</label>

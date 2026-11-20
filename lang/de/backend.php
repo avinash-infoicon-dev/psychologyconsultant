@@ -762,6 +762,7 @@ return [
             'updated' => 'Folie erfolgreich aktualisiert.',
             'deleted' => 'Folie erfolgreich gelöscht.',
             'subtitle' => 'Untertitel',
+            'para_text' => 'Absatz',
             'button' => 'Schaltfläche',
             'button_text' => 'Schaltflächentext',
             'button_url' => 'Schaltflächenlink',

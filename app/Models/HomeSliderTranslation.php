@@ -14,6 +14,7 @@ class HomeSliderTranslation extends Model
         'locale',
         'subtitle',
         'title',
+        'para_text',
         'button_text',
         'button_url',
         'image_path',
