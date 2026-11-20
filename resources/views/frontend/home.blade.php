@@ -425,13 +425,13 @@
 
     <!-- about area start -->
     <div class="cst-about-ptb p-relative pt-170 pb-120">
-        <div class="cst-about-shape d-none d-xxl-block" data-speed=".9">
+        <!-- <div class="cst-about-shape d-none d-xxl-block" data-speed=".9">
             <img src="{{ asset('frontendassets/assets/img/about/about-shape-1.webp') }}" alt="">
-        </div>
+        </div> -->
         <div class="container container-1530">
             <div class="row">
-                <div class="col-xxl-2 d-none d-xxl-block"></div>
-                <div class="col-xxl-6 col-lg-6">
+                <!-- <div class="col-xxl-2 d-none d-xxl-block"></div> -->
+                <div class="col-xxl-8 col-lg-6">
                     <div class="cst-about-heading mb-40">
                         <h3 class="cst-section-title fs-32 mb-25 tp_fade_anim" data-delay=".3">
                             {!! __('frontend.home.about_title') !!}
@@ -723,7 +723,7 @@
                 <div class="col-lg-12">
                     <div class="cst-service-heading text-center mb-60">
                         <span class="cst-section-subtitle mb-15 tp_fade_anim" data-delay=".3">
-                            {{ __('frontend.home.service_subtitle') }}
+                            {{ __('frontend.home.service_subtitle') }} 
                         </span>
                         <h4 class="cst-section-title tp_fade_anim" data-delay=".5">
                             {!! __('frontend.home.service_title') !!}
@@ -956,7 +956,7 @@
                 <div class="col-lg-6">
                     <div class="cst-team-heading mb-50">
                         <span class="cst-section-subtitle mb-15 tp_fade_anim" data-delay=".3">
-                            {{ __('frontend.home.team_subtitle') }}
+                            {{ __('frontend.home.team_subtitle') }} 
                         </span>
                         <h4 class="cst-section-title tp_fade_anim" data-delay=".5">
                             {!! __('frontend.home.team_title') !!}

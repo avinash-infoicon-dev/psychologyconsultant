@@ -5,13 +5,13 @@
   $items = \App\Services\Cms\CmsServicesPageService::frontendCards($servicesPage);
 @endphp
 <!-- service area start -->
-    <div class="cst-service-ptb pb-120" data-bg-color="#F3F1F2">
+    <div class="cst-service-ptb pt-120 pb-120" data-bg-color="#F3F1F2">
         <div class="container container-1530">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="cst-service-heading text-center mb-60">
                         <span class="cst-section-subtitle mb-15 tp_fade_anim" data-delay=".3">
-                            {{ $subtitle }}
+                            {{ $subtitle }} 
                         </span>
                         <h4 class="cst-section-title tp_fade_anim" data-delay=".5">
                             {!! $title !!}
