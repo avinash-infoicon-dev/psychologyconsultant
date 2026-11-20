@@ -107,7 +107,7 @@
                     <img src="{{ asset('commonassets/images/pricing/'.$icon) }}" alt="">
                   </span>
                   <div>
-                    <span class="onboarding-plan__type">{{ __('frontend.subscription.types.'.$plan->plan_type) }}</span>
+                    <!-- <span class="onboarding-plan__type">{{ __('frontend.subscription.types.'.$plan->plan_type) }}</span> -->
                     <h3>{{ $plan->name }}</h3>
                   </div>
                 </div>
