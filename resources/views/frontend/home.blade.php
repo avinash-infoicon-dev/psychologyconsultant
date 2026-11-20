@@ -105,7 +105,7 @@
                       </div>
                     @endforeach
                 </div>
-                <div class="tp-showcase-slider-button-wrap">
+                <!-- <div class="tp-showcase-slider-button-wrap">
                     <div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide">
                         <div><span>{{ __('frontend.home.next_slide') }}</span></div>
                         <div><i class="fas fa-chevron-right"></i></div>
@@ -115,7 +115,7 @@
                         <div><span>{{ __('frontend.home.prev_slide') }}</span></div>
                     </div>
                 </div>
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination"></div> -->
             </div>
         </div>
     </section>
