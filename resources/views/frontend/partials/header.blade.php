@@ -37,7 +37,7 @@
         <div class="tp-offcanvas-top d-flex align-items-center justify-content-between">
             <div class="tp-offcanvas-logo">
                 <a href="{{ route('frontend.home') }}">
-                    <img class="logo-1" src="{{ $siteLogo }}" alt="{{ $siteBrand }}">
+                    <img class="logo-1" src="{{ $siteLogoDark }}" alt="{{ $siteBrand }}">
                     {{-- <img class="logo-1" src="{{ asset('frontendassets/assets/img/logo.webp') }}" alt="{{ __('frontend.brand') }}"> --}}
                 </a>
             </div>
