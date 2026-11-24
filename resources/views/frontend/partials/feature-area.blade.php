@@ -94,10 +94,16 @@
           @foreach ($plans as $plan)
             @php
               $variant = $loop->index % 3;
-              $icons = ['price-icon1.png', 'price-icon2.png', 'price-icon3.png'];
-              $icon = $icons[$variant];
+              $icons = ['price-icon1.png', 'price-icon2.png', 'price-icon3.png', 'price-icon4.png', 'price-icon5.png'];
+              $count = $loop->index + 1;
+
+              $icons = array_combine(range(1, count($icons)), $icons);
+
+              $icon = $icons[$count] ?? $icons[1];
+              
             @endphp
-            <div class="col-xxl-3 col-md-6">
+            <!-- <div class="col-xxl-12 col-xxl-3 col-md-6"> --> 
+            <div class="{{ ($loop->first || $loop->last) ? 'col-xxl-12' : 'col-xxl-4 col-md-6' }}">
               <div class="onboarding-plan onboarding-plan--1">
                 @if ($plan->is_recommended)
                   <span class="onboarding-plan__badge">{{ __('frontend.onboarding.popular') }}</span>
@@ -117,7 +123,7 @@
                   <span>/ {{ __('frontend.subscription.intervals.'.$plan->billing_interval) }}</span>
                 </p>
                 <span class="onboarding-plan__included">{{ __('frontend.onboarding.included') }}</span>
-                <ul>
+                <ul class="{{ ($loop->first || $loop->last) ? 'inline-list-ul' : '' }}">
                   <li>{{ __('frontend.subscription.exchanges_included', ['count' => $plan->exchange_quota]) }}</li>
                   <li>{{ $plan->response_time_label ?: __('frontend.subscription.response_na') }}</li>
                   <li>
