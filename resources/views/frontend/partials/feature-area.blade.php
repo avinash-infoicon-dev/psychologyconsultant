@@ -103,7 +103,7 @@
               
             @endphp
             <!-- <div class="col-xxl-12 col-xxl-3 col-md-6"> --> 
-            <div class="{{ ($loop->first || $loop->last) ? 'col-xxl-12' : 'col-xxl-4 col-md-6' }}">
+            <div class="{{ ($loop->first || $loop->last) ? 'col-xxl-12' : 'col-xxl-4' }}">
               <div class="onboarding-plan onboarding-plan--1">
                 @if ($plan->is_recommended)
                   <span class="onboarding-plan__badge">{{ __('frontend.onboarding.popular') }}</span>
@@ -123,7 +123,7 @@
                   <span>/ {{ __('frontend.subscription.intervals.'.$plan->billing_interval) }}</span>
                 </p>
                 <span class="onboarding-plan__included">{{ __('frontend.onboarding.included') }}</span>
-                <ul class="{{ ($loop->first || $loop->last) ? 'inline-list-ul' : '' }}">
+                <ul class="{{ ($loop->first || $loop->last) ? 'inline-list-ul' : 'inline-list-ul-2' }}">
                   <li>{{ __('frontend.subscription.exchanges_included', ['count' => $plan->exchange_quota]) }}</li>
                   <li>{{ $plan->response_time_label ?: __('frontend.subscription.response_na') }}</li>
                   <li>
