@@ -238,7 +238,16 @@ class SubscriptionService
             );
         }
 
-        return $subscription->fresh(['plan']);
+        $changed = $subscription->fresh(['plan', 'patient.user']);
+        $patientUser = $changed->patient?->user;
+        if ($patientUser) {
+            $this->notifications->sendPayload(
+                $patientUser,
+                SubscriptionNotification::for($changed, 'changed'),
+            );
+        }
+
+        return $changed;
     }
 
     public function markPaymentFailed(Subscription $subscription, ?string $message = null): void

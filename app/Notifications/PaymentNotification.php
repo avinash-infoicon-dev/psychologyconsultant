@@ -18,7 +18,7 @@ class PaymentNotification
             'data' => [
                 'payment_id' => $payment->id,
                 'invoice_id' => $payment->invoice_id,
-                'url' => route('frontend.patient.subscription.history'),
+                'url' => route('frontend.patient.subscription.history', [], false),
             ],
         ];
     }
@@ -35,7 +35,7 @@ class PaymentNotification
             'data' => [
                 'payment_id' => $payment->id,
                 'invoice_id' => $payment->invoice_id,
-                'url' => route('frontend.patient.subscription.history'),
+                'url' => route('frontend.patient.subscription.history', [], false),
             ],
         ];
     }

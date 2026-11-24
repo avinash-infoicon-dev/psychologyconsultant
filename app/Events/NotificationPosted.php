@@ -49,7 +49,7 @@ class NotificationPosted implements ShouldBroadcastNow, ShouldDispatchAfterCommi
             'title' => $this->notification->title,
             'body' => $this->notification->body,
             'data' => $data,
-            'url' => $data['url'] ?? null,
+            'url' => $this->notification->actionUrl(),
             'conversation_id' => $data['conversation_id'] ?? null,
             'created_at' => $this->notification->created_at?->toIso8601String(),
             'unread_count' => $this->unreadCount,

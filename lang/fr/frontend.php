@@ -4,8 +4,11 @@ return [
     'notifications' => [
         'password_changed_title' => 'Mot de passe modifié',
         'password_changed_body' => 'Votre mot de passe a été modifié. Si vous n\'êtes pas à l\'origine de ce changement, contactez le support.',
+        'subscription_changed_title' => 'Formule d\'abonnement mise à jour',
+        'subscription_changed_body' => 'Votre formule actuelle est :plan.',
         'payment_success_title' => 'Paiement reçu',
         'payment_success_body' => 'Votre paiement a été effectué. Consultez votre historique de facturation pour plus de détails.',
+        'exchange_purchase_body' => 'Votre achat de :plan est confirmé. :count échanges sont maintenant disponibles.',
         'payment_attempt_failed_title' => 'Paiement échoué',
         'payment_attempt_failed_body' => 'Votre paiement n\'a pas abouti. Vérifiez votre moyen de paiement et réessayez.',
     ],

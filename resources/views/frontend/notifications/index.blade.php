@@ -50,7 +50,7 @@
               <button type="submit" class="fe-btn fe-btn--outline fe-btn--sm">{{ __('frontend.notifications.mark_read') }}</button>
             </form>
           @endif
-          @php $url = is_array($item->data) ? ($item->data['url'] ?? null) : null; @endphp
+          @php $url = $item->actionUrl(); @endphp
           @if ($url)
             <a href="{{ $url }}" class="fe-btn fe-btn--primary fe-btn--sm">{{ __('frontend.notifications.open') }}</a>
           @endif

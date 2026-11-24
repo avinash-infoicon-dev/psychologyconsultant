@@ -48,6 +48,28 @@ class Notification extends Model
         return LocalizedNotification::body($this);
     }
 
+    public function actionUrl(): ?string
+    {
+        $url = $this->data['url'] ?? null;
+        if (! is_string($url) || trim($url) === '') {
+            return null;
+        }
+
+        $parts = parse_url($url);
+        if ($parts === false || (isset($parts['scheme']) && ! in_array(strtolower($parts['scheme']), ['http', 'https'], true))) {
+            return null;
+        }
+
+        $path = $parts['path'] ?? null;
+        if (! is_string($path) || ! str_starts_with($path, '/')) {
+            return null;
+        }
+
+        return $path
+            .(isset($parts['query']) ? '?'.$parts['query'] : '')
+            .(isset($parts['fragment']) ? '#'.$parts['fragment'] : '');
+    }
+
     public function markAsRead(): void
     {
         if (! $this->isRead()) {

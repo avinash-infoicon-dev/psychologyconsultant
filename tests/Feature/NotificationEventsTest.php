@@ -4,14 +4,19 @@ namespace Tests\Feature;
 
 use App\Events\PaymentCompleted;
 use App\Events\PaymentFailed;
+use App\Events\SubscriptionCreated;
 use App\Mail\GenericNotificationMail;
+use App\Models\Patient;
 use App\Models\Payment;
+use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class NotificationEventsTest extends TestCase
@@ -67,6 +72,41 @@ class NotificationEventsTest extends TestCase
             'type' => 'security_alert',
         ]);
         Mail::assertQueued(GenericNotificationMail::class);
+    }
+
+    public function test_new_subscription_creates_the_in_app_notification_without_a_queue_worker(): void
+    {
+        Mail::fake();
+        Queue::fake();
+
+        $user = User::factory()->create();
+        $patient = Patient::query()->create(['user_id' => $user->id]);
+        $plan = Plan::factory()->create();
+        $subscription = Subscription::query()->create([
+            'patient_id' => $patient->id,
+            'plan_id' => $plan->id,
+            'plan_snapshot' => $plan->toSnapshot(),
+            'status' => Subscription::STATUS_ACTIVE,
+            'starts_at' => now(),
+            'current_period_starts_at' => now(),
+            'current_period_ends_at' => now()->addMonth(),
+            'included_exchanges' => $plan->exchange_quota,
+            'consumed_exchanges' => 0,
+            'purchased_exchanges' => 0,
+            'exchanges_used' => 0,
+            'exchanges_remaining' => $plan->exchange_quota,
+            'auto_renew' => true,
+            'cancel_at_period_end' => false,
+        ]);
+
+        event(new SubscriptionCreated($subscription));
+
+        $this->assertDatabaseHas('notifications', [
+            'user_id' => $user->id,
+            'type' => 'subscription',
+        ]);
+        Mail::assertQueued(GenericNotificationMail::class);
+        Queue::assertNothingPushed();
     }
 
     public function test_successful_payment_notifies_the_payer_without_a_direct_subscription_relation(): void

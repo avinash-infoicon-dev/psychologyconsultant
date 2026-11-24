@@ -208,7 +208,7 @@ class NotificationService
             'type' => $notification->type,
             'title' => $notification->localizedTitle(),
             'body' => $notification->localizedBody(),
-            'url' => $data['url'] ?? null,
+            'url' => $notification->actionUrl(),
             'conversation_id' => $data['conversation_id'] ?? null,
             'read_at' => $notification->read_at?->toIso8601String(),
             'created_at' => $notification->created_at?->toIso8601String(),

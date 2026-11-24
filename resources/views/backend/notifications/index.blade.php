@@ -39,7 +39,7 @@
               <small class="text-muted">{{ $item->created_at?->diffForHumans() }}</small>
             </div>
             <div class="d-flex gap-2">
-              @php $url = is_array($item->data) ? ($item->data['url'] ?? null) : null; @endphp
+              @php $url = $item->actionUrl(); @endphp
               @if ($url)
                 <a href="{{ $url }}" class="btn btn-sm btn-primary">{{ __('backend.notifications.open') }}</a>
               @endif

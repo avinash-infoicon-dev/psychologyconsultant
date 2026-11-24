@@ -22,6 +22,11 @@ class SubscriptionNotification
                 'title' => __('frontend.notifications.subscription_renewed_title'),
                 'body' => __('frontend.notifications.subscription_renewed_body', ['plan' => $planName]),
             ],
+            'changed' => [
+                'type' => 'subscription',
+                'title' => __('frontend.notifications.subscription_changed_title'),
+                'body' => __('frontend.notifications.subscription_changed_body', ['plan' => $planName]),
+            ],
             'cancelled' => [
                 'type' => 'subscription',
                 'title' => __('frontend.notifications.subscription_cancelled_title'),
@@ -57,7 +62,7 @@ class SubscriptionNotification
             'data' => [
                 'subscription_id' => $subscription->id,
                 'event' => $event,
-                'url' => route('frontend.patient.subscription.index'),
+                'url' => route('frontend.patient.subscription.index', [], false),
             ],
         ];
     }

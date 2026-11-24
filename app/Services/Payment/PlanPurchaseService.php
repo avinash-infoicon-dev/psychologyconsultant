@@ -6,7 +6,9 @@ use App\Models\Credit;
 use App\Models\ExchangeTransaction;
 use App\Models\Plan;
 use App\Models\User;
+use App\Notifications\ExchangePurchaseNotification;
 use App\Services\Messaging\ExchangeLedgerService;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -20,6 +22,7 @@ class PlanPurchaseService
     public function __construct(
         protected SubscriptionService $subscriptions,
         protected ExchangeLedgerService $ledger,
+        protected NotificationService $notifications,
     ) {}
 
     /**
@@ -58,7 +61,7 @@ class PlanPurchaseService
         }
 
         // On-demand / additional exchange → award credits (quota overflow & try-before-subscribe).
-        return DB::transaction(function () use ($patient, $plan, $gateway) {
+        $credit = DB::transaction(function () use ($patient, $plan, $gateway) {
             $amount = max(1, (int) $plan->exchange_quota);
 
             $subscription = $patient->lifecycleSubscription();
@@ -98,5 +101,13 @@ class PlanPurchaseService
                 'expires_at' => now()->addYear(),
             ]);
         });
+
+        $this->notifications->sendPayload(
+            $user,
+            ExchangePurchaseNotification::purchased($plan, $credit),
+            'credit-purchase:'.$credit->id,
+        );
+
+        return $credit;
     }
 }
