@@ -59,6 +59,12 @@
                                 </div>
                               </div>
                             @endforeach
+
+                            <div class="faq-load-more-wrap">
+                                <button type="button" id="faqLoadMore" class="faq-load-more-btn">
+                                        Load More
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
