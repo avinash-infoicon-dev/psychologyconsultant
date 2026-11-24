@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Payment;
 
 use App\Events\PaymentCompleted;
+use App\Events\PaymentFailed;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\Subscription;
@@ -62,8 +63,12 @@ class WebhookController extends Controller
             $payment->update(['status' => 'succeeded', 'paid_at' => now(), 'gateway_response' => $request->all()]);
             $payment->invoice?->update(['status' => 'paid', 'paid_at' => now()]);
             event(new PaymentCompleted($payment));
-        } elseif (in_array($status, ['FAILED', 'CANCELLED'], true)) {
+        } elseif (
+            in_array($status, ['FAILED', 'CANCELLED'], true)
+            && ! in_array($payment->status, ['succeeded', 'failed', 'refunded', 'partially_refunded'], true)
+        ) {
             $payment->update(['status' => 'failed', 'failure_reason' => $status, 'gateway_response' => $request->all()]);
+            event(new PaymentFailed($payment));
         }
 
         return response()->json(['received' => true]);
@@ -137,11 +142,19 @@ class WebhookController extends Controller
 
     protected function handleStripePaymentFailed(array $object): void
     {
-        Payment::where('gateway_transaction_id', $object['id'] ?? null)->first()?->update([
+        $payment = Payment::where('gateway_transaction_id', $object['id'] ?? null)->first();
+
+        if (! $payment || in_array($payment->status, ['succeeded', 'failed', 'refunded', 'partially_refunded'], true)) {
+            return;
+        }
+
+        $payment->update([
             'status' => 'failed',
             'failure_reason' => $object['last_payment_error']['message'] ?? 'Payment failed',
             'gateway_response' => $object,
         ]);
+
+        event(new PaymentFailed($payment));
     }
 
     /**

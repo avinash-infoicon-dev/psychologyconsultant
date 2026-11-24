@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\PasswordChangedNotification;
+use App\Services\NotificationService;
 use App\Services\TwoFactorService;
 use App\Support\Locales;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +17,10 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function __construct(protected TwoFactorService $twoFactor) {}
+    public function __construct(
+        protected TwoFactorService $twoFactor,
+        protected NotificationService $notifications,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -125,6 +130,9 @@ class UserController extends Controller
         }
 
         $user->update($payload);
+        if (! empty($data['password'])) {
+            $this->notifications->sendPayload($user, PasswordChangedNotification::payload());
+        }
         $this->applyTwoFactorPolicy($user, $data['two_factor_policy'] ?? 'default');
         $user->roles()->sync($data['roles']);
 

@@ -55,6 +55,7 @@ return [
         'subscription_expired' => ['database', 'mail'],
         'exchange_quota_low' => ['database', 'mail'],
         'payment_failed' => ['database', 'mail'],
+        'security_alert' => ['database', 'mail'],
         'account_status' => ['database', 'mail'],
         'profile_approved' => ['database', 'mail'],
         'profile_rejected' => ['database', 'mail'],

@@ -3,16 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\PaymentCompleted;
+use App\Notifications\PaymentNotification;
 use App\Notifications\SubscriptionNotification;
 use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Despite the name (kept to match the original module layout), this
- * listener doesn't create the invoice — InvoiceService already did that
- * when the subscription was created, and PaymentService marks it paid
- * directly on confirm(). What's left to do here once a payment
- * completes is notify the user their payment succeeded.
+ * The legacy listener name is retained for compatibility with its event
+ * registration; invoices are created by InvoiceService.
  */
 class CreateInvoice implements ShouldQueue
 {
@@ -21,19 +19,27 @@ class CreateInvoice implements ShouldQueue
     public function handle(PaymentCompleted $event): void
     {
         $payment = $event->payment;
+        $payment->loadMissing(['user', 'subscription.plan']);
 
-        if (! $payment->subscription) {
+        if (! $payment->user) {
             return;
         }
 
-        $payload = SubscriptionNotification::for($payment->subscription, 'renewed');
+        if ($payment->subscription) {
+            $periodKey = $payment->subscription->current_period_ends_at?->toDateString() ?? 'unknown';
+            $this->notifications->sendPayload(
+                $payment->user,
+                SubscriptionNotification::for($payment->subscription, 'renewed'),
+                'subscription:'.$payment->subscription->id.':renewed:'.$periodKey,
+            );
 
-        $this->notifications->send(
+            return;
+        }
+
+        $this->notifications->sendPayload(
             $payment->user,
-            $payload['type'],
-            $payload['title'],
-            $payload['body'],
-            $payload['data'],
+            PaymentNotification::succeeded($payment),
+            'payment:'.$payment->id.':succeeded',
         );
     }
 }

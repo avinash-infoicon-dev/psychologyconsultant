@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\PasswordChangedNotification;
+use App\Services\NotificationService;
 use App\Support\Locales;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +16,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function __construct(protected NotificationService $notifications) {}
+
     public function show(): View
     {
         $user = auth()->user()->load('roles');
@@ -67,6 +71,7 @@ class ProfileController extends Controller
             'password' => $data['password'],
             'password_changed_at' => now(),
         ]);
+        $this->notifications->sendPayload($user, PasswordChangedNotification::payload());
 
         return redirect()
             ->route('admin.profile.show')

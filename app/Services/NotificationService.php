@@ -20,7 +20,9 @@ class NotificationService
      * @var list<string>
      */
     public const LOCKED_TYPES = [
+        'payment',
         'payment_failed',
+        'security_alert',
         'subscription_expired',
         'account_status',
         'profile_rejected',
@@ -419,7 +421,7 @@ class NotificationService
     {
         return match ($type) {
             'new_message', 'psychologist_response', 'patient_request', 'request_accepted', 'request_rejected' => 'new_message',
-            'subscription', 'subscription_renewal', 'subscription_expired', 'payment_failed' => 'subscription',
+            'subscription', 'subscription_renewal', 'subscription_expired', 'payment', 'payment_failed' => 'subscription',
             'exchange_quota_low' => 'exchange',
             'account_status', 'profile_approved', 'profile_rejected' => 'account',
             default => null,

@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'notifications' => [
+        'password_changed_title' => 'Mot de passe modifié',
+        'password_changed_body' => 'Votre mot de passe a été modifié. Si vous n\'êtes pas à l\'origine de ce changement, contactez le support.',
+        'payment_success_title' => 'Paiement reçu',
+        'payment_success_body' => 'Votre paiement a été effectué. Consultez votre historique de facturation pour plus de détails.',
+        'payment_attempt_failed_title' => 'Paiement échoué',
+        'payment_attempt_failed_body' => 'Votre paiement n\'a pas abouti. Vérifiez votre moyen de paiement et réessayez.',
+    ],
     'home' => [
         'slider_1_subtitle' => 'Soins psychologiques',
         'slider_1_title' => 'Bien-être mental',

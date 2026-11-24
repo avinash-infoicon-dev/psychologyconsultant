@@ -27,6 +27,6 @@ Route::prefix('auth')->group(function () {
     Route::post('2fa/challenge', [TwoFactorController::class, 'challenge']);
     Route::post('2fa/verify', [TwoFactorController::class, 'verify']);
 
-    Route::post('password/forgot', [PasswordResetController::class, 'sendResetLink']);
+    Route::post('password/forgot', [PasswordResetController::class, 'sendResetLink'])->middleware('throttle:6,1');
     Route::post('password/reset', [PasswordResetController::class, 'reset']);
 });

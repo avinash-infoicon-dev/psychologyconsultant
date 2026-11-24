@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Frontend\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Notifications\PasswordChangedNotification;
 use App\Services\JwtService;
+use App\Services\NotificationService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +17,10 @@ use Illuminate\View\View;
 
 class PasswordResetController extends Controller
 {
-    public function __construct(protected JwtService $jwt) {}
+    public function __construct(
+        protected JwtService $jwt,
+        protected NotificationService $notifications,
+    ) {}
 
     public function create(): View
     {
@@ -51,6 +56,7 @@ class PasswordResetController extends Controller
                 $this->jwt->revokeAllForUser($user->id);
 
                 event(new PasswordReset($user));
+                $this->notifications->sendPayload($user, PasswordChangedNotification::payload());
             }
         );
 

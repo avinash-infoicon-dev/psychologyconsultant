@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Events\PaymentCompleted;
+use App\Events\PaymentFailed;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\User;
@@ -48,6 +49,10 @@ class PaymentService
 
     public function confirm(Payment $payment, ?string $paymentMethodId = null): Payment
     {
+        if ($payment->status === 'succeeded') {
+            return $payment;
+        }
+
         $result = match ($payment->gateway) {
             'stripe' => $this->stripe->confirmPaymentIntent($payment->gateway_transaction_id, $paymentMethodId),
             'twint' => $this->twint->getPaymentStatus($payment->gateway_transaction_id),
@@ -68,6 +73,8 @@ class PaymentService
             if ($succeeded) {
                 $payment->invoice?->update(['status' => 'paid', 'paid_at' => now()]);
                 event(new PaymentCompleted($payment));
+            } else {
+                event(new PaymentFailed($payment));
             }
 
             return $payment->fresh();

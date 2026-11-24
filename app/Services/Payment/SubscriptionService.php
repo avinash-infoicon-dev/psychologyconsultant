@@ -7,7 +7,9 @@ use App\Models\Patient;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Notifications\SubscriptionNotification;
 use App\Services\Messaging\ExchangeLedgerService;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -18,6 +20,7 @@ class SubscriptionService
         protected TwintService $twint,
         protected InvoiceService $invoices,
         protected ExchangeLedgerService $ledger,
+        protected NotificationService $notifications,
     ) {}
 
     /**
@@ -117,6 +120,18 @@ class SubscriptionService
             'cancel_at_period_end' => false,
             'pending_plan_id' => null,
         ]);
+
+        $subscription->loadMissing(['patient.user', 'plan']);
+        $patientUser = $subscription->patient?->user;
+        if ($patientUser) {
+            DB::afterCommit(function () use ($patientUser, $subscription) {
+                $this->notifications->sendPayload(
+                    $patientUser,
+                    SubscriptionNotification::for($subscription, 'cancelled'),
+                    'subscription:'.$subscription->id.':cancelled',
+                );
+            });
+        }
     }
 
     public function setAutoRenew(Subscription $subscription, bool $enabled): void
@@ -238,18 +253,24 @@ class SubscriptionService
         $patientUser = $subscription->patient?->user;
 
         if ($patientUser) {
-            $payload = \App\Notifications\SubscriptionNotification::for($subscription, 'payment_failed');
-            app(\App\Services\NotificationService::class)->sendPayload($patientUser, $payload);
+            $payload = SubscriptionNotification::for($subscription, 'payment_failed');
+            $periodKey = $subscription->current_period_ends_at?->toDateString() ?? 'unknown';
+            $this->notifications->sendPayload(
+                $patientUser,
+                $payload,
+                'subscription:'.$subscription->id.':payment_failed:'.$periodKey,
+            );
         }
 
         $patientName = $patientUser?->name ?? '#'.$subscription->patient_id;
-        app(\App\Services\NotificationService::class)->notifyAdmins(
+        $this->notifications->notifyAdmins(
             \App\Notifications\AdminAlertNotification::systemAlert(
                 __('frontend.notifications.admin_payment_failed_title'),
                 __('frontend.notifications.admin_payment_failed_body', ['name' => $patientName]),
                 route('admin.subscriptions.index'),
                 ['subscription_id' => $subscription->id],
             ),
+            'subscription:'.$subscription->id.':payment_failed:'.($subscription->current_period_ends_at?->toDateString() ?? 'unknown'),
         );
     }
 
@@ -279,8 +300,12 @@ class SubscriptionService
 
             $subscription->loadMissing(['patient.user', 'plan']);
             if ($subscription->patient?->user) {
-                $payload = \App\Notifications\SubscriptionNotification::for($subscription, 'expired');
-                app(\App\Services\NotificationService::class)->sendPayload($subscription->patient->user, $payload);
+                $payload = SubscriptionNotification::for($subscription, 'expired');
+                $this->notifications->sendPayload(
+                    $subscription->patient->user,
+                    $payload,
+                    'subscription:'.$subscription->id.':expired:'.($subscription->current_period_ends_at?->toDateString() ?? 'unknown'),
+                );
             }
 
             return;
@@ -323,6 +348,18 @@ class SubscriptionService
         );
 
         $this->invoices->generateForSubscription($subscription);
+
+        $subscription->loadMissing('patient.user');
+        $patientUser = $subscription->patient?->user;
+        if ($patientUser) {
+            $payload = SubscriptionNotification::for($subscription, 'renewed');
+            $periodKey = $subscription->current_period_ends_at?->toDateString() ?? 'unknown';
+            $this->notifications->sendPayload(
+                $patientUser,
+                $payload,
+                'subscription:'.$subscription->id.':renewed:'.$periodKey,
+            );
+        }
     }
 
     protected function cancelExistingActiveSubscription(Patient $patient): void
