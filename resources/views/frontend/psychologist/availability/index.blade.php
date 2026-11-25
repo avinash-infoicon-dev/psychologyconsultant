@@ -3,6 +3,96 @@
 @section('title', __('frontend.availability.title'))
 @section('page_title', __('frontend.availability.title'))
 
+@push('styles')
+  <style>
+    .dashboard-main-body .fe-availability-day-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+      gap: 0.55rem;
+    }
+
+    .dashboard-main-body .fe-availability-day-option {
+      position: relative;
+      display: block;
+      margin: 0;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .dashboard-main-body .fe-availability-day-option input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .dashboard-main-body .fe-availability-day-option span {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 2.75rem;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--neutral-300, #d1d5db);
+      border-radius: 0.65rem;
+      background: var(--base, #fff);
+      color: var(--text-primary-light, #334155);
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .dashboard-main-body .fe-availability-day-option span::before {
+      content: "";
+      display: inline-grid;
+      place-items: center;
+      width: 1.1rem;
+      height: 1.1rem;
+      flex: 0 0 1.1rem;
+      border: 1px solid var(--neutral-400, #94a3b8);
+      border-radius: 0.3rem;
+      color: #fff;
+      font-size: 0.75rem;
+      line-height: 1;
+    }
+
+    .dashboard-main-body .fe-availability-day-option input:checked + span {
+      border-color: var(--primary-600, #0f766e);
+      background: var(--primary-50, #f0fdfa);
+      color: var(--primary-700, #0f766e);
+      font-weight: 700;
+    }
+
+    .dashboard-main-body .fe-availability-day-option input:checked + span::before {
+      content: "✓";
+      border-color: var(--primary-600, #0f766e);
+      background: var(--primary-600, #0f766e);
+    }
+
+    .dashboard-main-body .fe-availability-day-option input:focus-visible + span {
+      outline: 3px solid rgba(15, 118, 110, 0.25);
+      outline-offset: 2px;
+    }
+
+    [data-theme="dark"] .dashboard-main-body .fe-availability-day-option span {
+      border-color: var(--neutral-600, #475569);
+      background: var(--base, #111827);
+      color: var(--text-primary-dark, #e2e8f0);
+    }
+
+    [data-theme="dark"] .dashboard-main-body .fe-availability-day-option input:checked + span {
+      border-color: #2dd4bf;
+      background: rgba(45, 212, 191, 0.16);
+      color: #99f6e4;
+    }
+
+    [data-theme="dark"] .dashboard-main-body .fe-availability-day-option input:checked + span::before {
+      border-color: #2dd4bf;
+      background: #0f766e;
+    }
+  </style>
+@endpush
+
 @php
   //$openAdd = $errors->any() && old('form_context') === 'availability_add';
   $openAdd = false;
@@ -164,10 +254,10 @@
           @if (count($availableDays) === 0)
             <p class="fe-muted" style="margin:.55rem 0 0;">{{ __('frontend.availability.all_days_added') }}</p>
           @else
-            <div class="fe-checkbox-grid" style="margin-top:.55rem;">
+            <div class="fe-availability-day-grid" style="margin-top:.55rem;">
             {{--Previous: allow all days including ones already added--}}
               @foreach ($days as $day)
-                <label class="fe-checkbox-row">
+                <label class="fe-availability-day-option">
                   <input type="checkbox" name="days[]" value="{{ $day }}"
                     @checked(in_array($day, $selectedDays, true))>
                   <span>{{ __('frontend.availability.days.'.$day) }}</span>
