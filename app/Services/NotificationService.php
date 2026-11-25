@@ -39,7 +39,8 @@ class NotificationService
      * consistently in the user's notification center.
      *
      * Reverb is always used for in-app types (private user channel `.notification`).
-     * Email is queued. Chat types are database (+ Reverb), not mail.
+     * Billing email is sent synchronously; other email is queued. Chat types
+     * are database (+ Reverb), not mail.
      */
     public function send(
         User $user,
@@ -494,10 +495,22 @@ class NotificationService
 
     protected function sendEmail(User $user, string $type, string $title, string $body, array $data): void
     {
-        // Queued mailable — chat HTTP never waits on SMTP.
-        // SendEmailNotification::dispatch($user, $title, $body, $data);
-        Mail::to($user->email)->queue(
-            new \App\Mail\GenericNotificationMail($title, $body, $data)
-        );
+        $mail = new \App\Mail\GenericNotificationMail($title, $body, $data);
+
+        if (in_array($type, ['payment', 'payment_failed', 'subscription', 'subscription_renewal', 'subscription_expired'], true)) {
+            try {
+                Mail::to($user->email)->send($mail);
+            } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e) {
+                Log::error('Billing notification email could not be sent.', [
+                    'user_id' => $user->id,
+                    'notification_type' => $type,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
+            return;
+        }
+
+        Mail::to($user->email)->queue($mail);
     }
 }

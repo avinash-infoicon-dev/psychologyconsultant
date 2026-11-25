@@ -5,9 +5,8 @@ namespace App\Listeners;
 use App\Events\PaymentFailed;
 use App\Notifications\PaymentNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyPaymentFailed implements ShouldQueue
+class NotifyPaymentFailed
 {
     public function __construct(protected NotificationService $notifications) {}
 

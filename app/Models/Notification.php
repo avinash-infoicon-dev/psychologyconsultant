@@ -65,6 +65,13 @@ class Notification extends Model
             return null;
         }
 
+        if (preg_match('#/(?:admin|patient|psychologist)(?:/|$)#', $path, $match, PREG_OFFSET_CAPTURE)) {
+            $path = substr($path, $match[0][1]);
+            $basePath = rtrim(request()->getBaseUrl(), '/');
+            $basePath = preg_replace('#/index\.php$#', '', $basePath) ?? $basePath;
+            $path = $basePath.$path;
+        }
+
         return $path
             .(isset($parts['query']) ? '?'.$parts['query'] : '')
             .(isset($parts['fragment']) ? '#'.$parts['fragment'] : '');

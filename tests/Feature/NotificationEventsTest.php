@@ -103,9 +103,9 @@ class NotificationEventsTest extends TestCase
 
         $this->assertDatabaseHas('notifications', [
             'user_id' => $user->id,
-            'type' => 'subscription',
+            'type' => 'payment',
         ]);
-        Mail::assertQueued(GenericNotificationMail::class);
+        Mail::assertSent(GenericNotificationMail::class);
         Queue::assertNothingPushed();
     }
 
@@ -128,7 +128,7 @@ class NotificationEventsTest extends TestCase
             'type' => 'payment',
             'dedupe_key' => 'payment:'.$payment->id.':succeeded',
         ]);
-        Mail::assertQueued(GenericNotificationMail::class);
+        Mail::assertSent(GenericNotificationMail::class);
     }
 
     public function test_failed_payment_notifies_the_payer_once(): void
@@ -150,6 +150,6 @@ class NotificationEventsTest extends TestCase
             1,
             $user->notifications()->where('dedupe_key', 'payment:'.$payment->id.':failed')->count(),
         );
-        Mail::assertQueued(GenericNotificationMail::class);
+        Mail::assertSent(GenericNotificationMail::class);
     }
 }

@@ -13,7 +13,7 @@ class SubscriptionNotification
 
         $map = [
             'created' => [
-                'type' => 'subscription',
+                'type' => 'payment',
                 'title' => __('frontend.notifications.subscription_created_title'),
                 'body' => __('frontend.notifications.subscription_created_body', ['plan' => $planName]),
             ],

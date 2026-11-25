@@ -6,13 +6,12 @@ use App\Events\PaymentCompleted;
 use App\Notifications\PaymentNotification;
 use App\Notifications\SubscriptionNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * The legacy listener name is retained for compatibility with its event
  * registration; invoices are created by InvoiceService.
  */
-class CreateInvoice implements ShouldQueue
+class CreateInvoice
 {
     public function __construct(protected NotificationService $notifications) {}
 

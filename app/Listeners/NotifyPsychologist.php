@@ -5,9 +5,8 @@ namespace App\Listeners;
 use App\Events\MessageSent;
 use App\Notifications\NewMessageNotification;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyPsychologist implements ShouldQueue
+class NotifyPsychologist
 {
     public function __construct(protected NotificationService $notifications) {}
 
