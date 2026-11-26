@@ -30,7 +30,7 @@
               <td>
                 <a href="{{ $link->url }}" target="_blank" rel="noopener" class="fe-table-link">{{ \Illuminate\Support\Str::limit($link->url, 48) }}</a>
               </td>
-              <td>{{ $link->status ? __('frontend.active') : '—' }}</td>
+              <td>{{ $link->status ? __('frontend.active') : __('frontend.inactive') }}</td>
               <td>
                 <div class="fe-table-actions">
                   <button type="button" class="fe-btn fe-btn--outline fe-btn--sm" data-fe-modal-open="social-edit-{{ $link->id }}">
@@ -116,7 +116,7 @@
         </div>
         <div class="fe-form-group">
           <label class="fe-checkbox-row" style="margin-top:1.6rem;">
-            <input type="checkbox" name="status" value="1" @checked(! $openAdd || old('status', true))>
+            <input type="checkbox" name="status" value="1" @checked($openAdd ? old('status') : true)>
             <span>{{ __('frontend.active') }}</span>
           </label>
         </div>

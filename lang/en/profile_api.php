@@ -6,10 +6,13 @@ return [
     'web' => [
         'title' => 'My profile',
         'save' => 'Save profile',
+        'photo' => 'Profile photo',
+        'photo_hint' => 'JPG, PNG, or WebP. Maximum file size: 4 MB.',
     ],
 
     'validation' => [
         'attributes' => [
+            'avatar_image' => 'profile photo',
             'name' => 'name',
             'phone' => 'phone',
             'locale' => 'language',

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use RuntimeException;
 
 class ProfileService
 {
@@ -39,10 +42,32 @@ class ProfileService
     public function updatePatientProfile(User $user, array $data): Patient
     {
         $patient = $this->patientProfile($user);
+        $oldAvatarPath = $user->avatar_path;
+        $avatarImage = $data['avatar_image'] ?? null;
+        $newAvatarPath = null;
 
         $user->update(array_intersect_key($data, array_flip($this->userFields)));
 
+        if ($avatarImage instanceof UploadedFile) {
+            $storedPath = $avatarImage->store('patients/'.$user->id.'/profile', 'public');
+            if (! is_string($storedPath)) {
+                throw new RuntimeException('Unable to store patient profile photo.');
+            }
+
+            $newAvatarPath = 'storage/'.$storedPath;
+            $user->update(['avatar_path' => $newAvatarPath]);
+        }
+
         $patient->update(array_intersect_key($data, array_flip($this->patientFields)));
+
+        $managedPrefix = 'storage/patients/'.$user->id.'/profile/';
+        if (
+            $newAvatarPath
+            && is_string($oldAvatarPath)
+            && str_starts_with($oldAvatarPath, $managedPrefix)
+        ) {
+            Storage::disk('public')->delete(substr($oldAvatarPath, strlen('storage/')));
+        }
 
         return $patient->fresh(['user']);
     }

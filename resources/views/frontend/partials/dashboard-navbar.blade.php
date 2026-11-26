@@ -11,8 +11,9 @@
   $roleLabel = $isPatient
     ? __('relationship.patient')
     : ($isPsychologist ? __('backend.patients.psychologist') : '');
-  $avatarUrl = $user->professional?->profile_image_url
-    ?? asset('commonassets/images/user.png');
+  $avatarUrl = $isPatient
+    ? $user->avatar_url
+    : ($user->professional?->profile_image_url ?? asset('commonassets/images/user.png'));
   $themeToggleLabelLight = __('frontend.theme.to_light');
   $themeToggleLabelDark = __('frontend.theme.to_dark');
 @endphp

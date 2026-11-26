@@ -6,10 +6,13 @@ return [
     'web' => [
         'title' => 'Mon profil',
         'save' => 'Enregistrer le profil',
+        'photo' => 'Photo de profil',
+        'photo_hint' => 'JPG, PNG ou WebP. Taille maximale : 4 Mo.',
     ],
 
     'validation' => [
         'attributes' => [
+            'avatar_image' => 'photo de profil',
             'name' => 'nom',
             'phone' => 'téléphone',
             'locale' => 'langue',

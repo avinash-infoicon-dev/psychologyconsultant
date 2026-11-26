@@ -21,7 +21,7 @@ class ProfileSocialLinkController extends Controller
         ProfessionalSocialLink::query()->create([
             ...$data,
             'professional_id' => $professional->id,
-            'status' => $request->boolean('status', true),
+            'status' => $request->boolean('status'),
         ]);
 
         return redirect()

@@ -76,7 +76,9 @@
   }
 
   $defaultAvatar = asset('commonassets/images/user.png');
-  $authAvatarUrl = $authUser->professional?->profile_image_url ?? $defaultAvatar;
+  $authAvatarUrl = $authUser->isPatient()
+      ? $authUser->avatar_url
+      : ($authUser->professional?->profile_image_url ?? $defaultAvatar);
   $peerAvatarUrl = (! $isPsychologist && $peer)
       ? ($peer->profile_image_url ?? $defaultAvatar)
       : $defaultAvatar;

@@ -1,5 +1,14 @@
 <?php
 
+$storageLinks = [
+    public_path('storage') => storage_path('app/public'),
+];
+
+$legacyPublicStorage = base_path('../html/storage');
+if (is_dir(dirname($legacyPublicStorage))) {
+    $storageLinks[$legacyPublicStorage] = storage_path('app/public');
+}
+
 return [
 
     /*
@@ -91,10 +100,6 @@ return [
     |
     */
 
-    'links' => [
-        // public_path('storage') => storage_path('app/public'),
-         base_path('../html/storage') => storage_path('app/public'),   // on live server
-         //base_path('../../html/storage') => storage_path('app/public'),
-    ],
+    'links' => $storageLinks,
 
 ];

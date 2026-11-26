@@ -48,7 +48,7 @@
   --}}
 
   @php
-    $avatarUrl = asset('commonassets/images/user.png');
+    $avatarUrl = $user->avatar_url;
     $care = $care ?? [];
     $unreadMessageCount = $unreadMessageCount ?? 0;
   @endphp

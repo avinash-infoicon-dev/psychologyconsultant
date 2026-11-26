@@ -5,9 +5,21 @@
 
 @section('content')
   <div class="fe-cms-card">
-    <form action="{{ route('frontend.patient.profile.update') }}" method="post">
+    <form action="{{ route('frontend.patient.profile.update') }}" method="post" enctype="multipart/form-data">
       @csrf
       @method('PUT')
+
+      <div class="fe-profile-media-row">
+        <div class="fe-form-group">
+          <label for="avatar_image">{{ __('profile_api.web.photo') }}</label>
+          <div class="fe-profile-media-preview">
+            <img src="{{ $patient->user->avatar_url }}" alt="{{ $patient->user->name }}">
+          </div>
+          <input type="file" name="avatar_image" id="avatar_image" class="fe-input"
+            accept="image/jpeg,image/png,image/webp">
+          <small class="fe-muted">{{ __('profile_api.web.photo_hint') }}</small>
+        </div>
+      </div>
 
       <div class="fe-form-grid">
         <div class="fe-form-group">

@@ -727,6 +727,7 @@ return [
     'delete' => 'Supprimer',
     'actions' => 'Actions',
     'active' => 'Actif',
+    'inactive' => 'Inactif',
     'confirm_delete' => 'Supprimer cet élément ?',
 
     'patients' => [
@@ -931,6 +932,7 @@ return [
         'untitled' => 'Sans titre',
         'open_link' => 'Ouvrir le lien',
         'updated' => 'Profil mis à jour.',
+        'end_date_required' => 'Saisissez une date de fin ou cochez « Je travaille actuellement ici ».',
         'verification_submit' => 'Soumettre pour vérification',
         'verification_submitted' => 'Profil soumis pour vérification.',
         'verification_incomplete' => 'Ajoutez votre nom, au moins une spécialisation et une formation avant de soumettre.',

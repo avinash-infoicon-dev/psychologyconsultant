@@ -127,6 +127,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasRbacRole('admin');
     }
 
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar_path
+            ? asset($this->avatar_path)
+            : asset('commonassets/images/user.png');
+    }
+
     /** Psychologist may log in unless the account is suspended. */
     public function canLoginToApi(): bool
     {

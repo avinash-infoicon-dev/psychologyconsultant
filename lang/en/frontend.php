@@ -706,6 +706,7 @@ return [
     'delete' => 'Delete',
     'actions' => 'Actions',
     'active' => 'Active',
+    'inactive' => 'Inactive',
     'confirm_delete' => 'Delete this item?',
 
     'patients' => [
@@ -910,6 +911,7 @@ return [
         'untitled' => 'Untitled',
         'open_link' => 'Open link',
         'updated' => 'Profile updated.',
+        'end_date_required' => 'Enter an end date or select “Currently working here”.',
         'verification_submit' => 'Submit for verification',
         'verification_submitted' => 'Profile submitted for verification.',
         'verification_incomplete' => 'Add your name, at least one specialization, and one education entry before submitting.',

@@ -24,6 +24,7 @@ class UpdateProfileRequest extends ProfileApiRequest
 
         if ($user->isPatient()) {
             return array_merge($common, [
+                'avatar_image' => ['sometimes', 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
                 'date_of_birth' => ['sometimes', 'date', 'before:-18 years'],
                 'gender' => ['sometimes', 'nullable', 'string', 'max:50'],
                 'address' => ['sometimes', 'nullable', 'string', 'max:255'],

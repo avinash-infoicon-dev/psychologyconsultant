@@ -62,9 +62,11 @@ class ProfileExperienceController extends Controller
             'designation' => ['required', 'string', 'max:255'],
             'organization' => ['required', 'string', 'max:255'],
             'start_date' => ['nullable', 'date'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'end_date' => ['required_unless:currently_working,1', 'nullable', 'date', 'after_or_equal:start_date'],
             'currently_working' => ['nullable', 'boolean'],
             'description' => ['nullable', 'string', 'max:2000'],
+        ], [
+            'end_date.required_unless' => __('frontend.psych_profile.end_date_required'),
         ]);
     }
 
