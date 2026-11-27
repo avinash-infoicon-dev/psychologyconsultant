@@ -102,11 +102,12 @@
 
       <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-          <i class="bi bi-person-circle fs-5"></i>
+          <img src="{{ auth()->user()->avatar_url }}" alt="" class="user-image rounded-circle shadow-sm" width="32" height="32" style="width:2rem;height:2rem;object-fit:cover;vertical-align:middle;">
           <span class="d-none d-md-inline ms-1">{{ auth()->user()->name }}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-          <li class="user-header text-bg-primary">
+          <li class="user-header text-bg-primary text-center">
+            <img src="{{ auth()->user()->avatar_url }}" alt="" class="rounded-circle shadow-sm mb-2" width="72" height="72" style="width:4.5rem;height:4.5rem;object-fit:cover;">
             <p class="mb-0">{{ auth()->user()->name }}</p>
             <small>{{ auth()->user()->primaryRole()?->name }}</small>
           </li>

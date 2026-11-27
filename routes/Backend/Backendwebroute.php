@@ -63,6 +63,7 @@ Route::prefix($adminPrefix)->group(function () {
         Route::middleware('role:superadmin,admin')->group(function () {
             Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile.show');
             Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+            Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('admin.profile.avatar');
             Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password');
         });
 

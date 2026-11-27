@@ -7,17 +7,24 @@
   <li class="breadcrumb-item active">{{ __('backend.create') }}</li>
 @endsection
 
+@push('styles')
+  @include('backend.partials._admin-modern-styles')
+@endpush
+
 @section('content')
-  <div class="card card-primary card-outline">
-    <form action="{{ route('admin.cms.menus.store') }}" method="post">
-      @csrf
-      <div class="card-body">
-        @include('backend.cms.menus._form')
-      </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">{{ __('backend.save') }}</button>
-        <a href="{{ route('admin.cms.menus.index', ['location' => $location]) }}" class="btn btn-secondary">{{ __('backend.cancel') }}</a>
-      </div>
-    </form>
+  <div class="adm">
+    <div class="adm__card">
+      <form action="{{ route('admin.cms.menus.store') }}" method="post">
+        @csrf
+        <div class="adm__card-head"><h2 class="adm__card-title"><i class="bi bi-plus-lg" aria-hidden="true"></i>{{ __('backend.cms.menus.create') }}</h2></div>
+        <div class="adm__card-body adm-form">
+          @include('backend.cms.menus._form')
+        </div>
+        <div class="adm__card-foot">
+          <button type="submit" class="adm__btn adm__btn--primary"><i class="bi bi-check-lg" aria-hidden="true"></i>{{ __('backend.save') }}</button>
+          <a href="{{ route('admin.cms.menus.index', ['location' => $location]) }}" class="adm__btn adm__btn--secondary">{{ __('backend.cancel') }}</a>
+        </div>
+      </form>
+    </div>
   </div>
 @endsection

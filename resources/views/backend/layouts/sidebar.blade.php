@@ -528,4 +528,5 @@
       </ul>
     </nav>
   </div>
+  @include('backend.partials._sidebar-modern-styles')
 </aside>

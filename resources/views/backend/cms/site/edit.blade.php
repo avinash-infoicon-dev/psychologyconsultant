@@ -4,15 +4,22 @@
 @section('breadcrumb')
   <li class="breadcrumb-item active">{{ __('backend.menu.cms_site') }}</li>
 @endsection
+
+@push('styles')
+  @include('backend.partials._admin-modern-styles')
+@endpush
+
 @section('content')
   @php
     $activeLocale = in_array(app()->getLocale(), $locales, true) ? app()->getLocale() : ($locales[0] ?? 'en');
   @endphp
-  <div class="card card-primary card-outline">
+  <div class="adm">
+   <div class="adm__card">
     <form action="{{ route('admin.cms.site.update') }}" method="post" enctype="multipart/form-data">
       @csrf
       @method('PUT')
-      <div class="card-body">
+      <div class="adm__card-head"><h2 class="adm__card-title"><i class="bi bi-window-sidebar" aria-hidden="true"></i>{{ __('backend.menu.cms_site') }}</h2></div>
+      <div class="adm__card-body adm-form">
         <p class="text-muted">{{ __('backend.cms.site.help') }}</p>
 
         <div class="row">
@@ -175,9 +182,10 @@
           @endforeach
         </div>
       </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">{{ __('backend.save') }}</button>
+      <div class="adm__card-foot">
+        <button type="submit" class="adm__btn adm__btn--primary"><i class="bi bi-check-lg" aria-hidden="true"></i>{{ __('backend.save') }}</button>
       </div>
     </form>
+   </div>
   </div>
 @endsection

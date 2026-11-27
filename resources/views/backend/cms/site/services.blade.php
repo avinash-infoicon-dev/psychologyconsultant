@@ -5,15 +5,22 @@
   <li class="breadcrumb-item"><a href="{{ route('admin.cms.pages.index') }}">{{ __('backend.menu.cms_pages') }}</a></li>
   <li class="breadcrumb-item active">{{ __('backend.menu.cms_services') }}</li>
 @endsection
+
+@push('styles')
+  @include('backend.partials._admin-modern-styles')
+@endpush
+
 @section('content')
   @php
     $activeLocale = in_array(app()->getLocale(), $locales, true) ? app()->getLocale() : ($locales[0] ?? 'en');
   @endphp
-  <div class="card card-primary card-outline">
+  <div class="adm">
+   <div class="adm__card">
     <form action="{{ route('admin.cms.services.update') }}" method="post" enctype="multipart/form-data">
       @csrf
       @method('PUT')
-      <div class="card-body">
+      <div class="adm__card-head"><h2 class="adm__card-title"><i class="bi bi-grid" aria-hidden="true"></i>{{ __('backend.menu.cms_services') }}</h2></div>
+      <div class="adm__card-body adm-form">
         <p class="text-muted">{{ __('backend.cms.pages.services_help') }}</p>
 
         <ul class="nav nav-tabs" role="tablist">
@@ -35,10 +42,11 @@
           @endforeach
         </div>
       </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">{{ __('backend.save') }}</button>
+      <div class="adm__card-foot">
+        <button type="submit" class="adm__btn adm__btn--primary"><i class="bi bi-check-lg" aria-hidden="true"></i>{{ __('backend.save') }}</button>
       </div>
     </form>
+   </div>
   </div>
   <template id="service-card-template">
     <div class="border rounded p-3 bg-body mb-3" data-service-card data-index="__N__">
