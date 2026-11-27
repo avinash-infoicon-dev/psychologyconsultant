@@ -11,7 +11,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
       <h3 class="card-title mb-0">{{ __('backend.logs.audit_title') }}</h3>
-      <form method="get" class="d-flex gap-2 align-items-center flex-wrap">
+      <form method="get" class="d-flex gap-2 align-items-center ">
         <input type="search" name="q" value="{{ request('q') }}" class="form-control form-control-sm" placeholder="{{ __('backend.search') }}">
         <input type="text" name="auditable_type" value="{{ request('auditable_type') }}" class="form-control form-control-sm" placeholder="{{ __('backend.logs.auditable_type') }}">
         <input type="number" name="auditable_id" value="{{ request('auditable_id') }}" class="form-control form-control-sm" placeholder="{{ __('backend.logs.auditable_id') }}" min="1">

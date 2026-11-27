@@ -4,23 +4,14 @@
 @section('page_title', __('backend.dashboard_pages.superadmin_title'))
 
 @section('content')
-  <div class="alert alert-primary">
-    <h5 class="mb-1">{{ __('backend.welcome') }}, {{ $user->name }}</h5>
-    {{--<p class="mb-0">{{ __('backend.dashboard_pages.superadmin_subtitle') }}</p>--}}
-  </div>
-
-  @include('backend.dashboard.partials.admin-stats')
-
-  {{-- Previous dashboard cards
-  <div class="row">
-    <div class="col-lg-3 col-6">
-      <div class="small-box text-bg-primary">
-        <div class="inner">
-          <h3>{{ $stats['patients'] }}</h3>
-          <p>{{ __('backend.dashboard_pages.total_users') }}</p>
-        </div>
+  <div class="admin-dashboard">
+    <section class="admin-dashboard__hero">
+      <span class="admin-dashboard__hero-icon" aria-hidden="true"><i class="bi bi-shield-check"></i></span>
+      <div>
+        <h1 class="admin-dashboard__welcome">{{ __('backend.welcome') }}, {{ $user->name }}</h1>
+        <p class="admin-dashboard__subtitle">{{ __('backend.dashboard_pages.superadmin_subtitle') }}</p>
       </div>
-    </div>
+    </section>
+    @include('backend.dashboard.partials.admin-stats')
   </div>
-  --}}
 @endsection

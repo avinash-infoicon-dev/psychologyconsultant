@@ -10,7 +10,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
       <h3 class="card-title mb-0">{{ __('backend.subscriptions.title') }}</h3>
-      <form method="get" class="d-flex gap-2 flex-wrap">
+      <form method="get" class="d-flex gap-2  ">
         <input type="search" name="q" value="{{ request('q') }}" class="form-control form-control-sm" placeholder="{{ __('backend.search') }}">
         <select name="status" class="form-select form-select-sm">
           <option value="">{{ __('backend.status') }}</option>
